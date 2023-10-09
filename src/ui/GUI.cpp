@@ -49,3 +49,18 @@ GUIMainFrame::~GUIMainFrame()
 	m_button_Active->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( GUIMainFrame::m_button_ActiveOnButtonClick ), NULL, this );
 	
 }
+
+GUIScreenPanel::GUIScreenPanel( wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxSize& size, long style ) : wxPanel( parent, id, pos, size, style )
+{
+	this->Hide();
+	
+	gSizer_Screen = new wxGridSizer( 1, 1, 0, 0 );
+	
+	
+	this->SetSizer( gSizer_Screen );
+	this->Layout();
+}
+
+GUIScreenPanel::~GUIScreenPanel()
+{
+}

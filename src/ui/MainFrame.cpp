@@ -12,6 +12,7 @@ UI::MainFrame::MainFrame()
 {
     m_captor = new Func::CaptureMechanism();
 
+    m_screenBuffer = new GUIScreenPanel(nullptr, wxID_ANY, wxPoint(0, 0), wxSize(m_captor->n_displayWidth, m_captor->n_displayHeight));
     // Set minimum size hints
     GetSizer()->SetSizeHints(this);
 }
@@ -37,6 +38,7 @@ void UI::MainFrame::m_button_AreaOnButtonClick(wxCommandEvent& event)
 {
     m_captor->mode = Func::Mode::Area;
     m_captor->GrabbingImage();
+    //m_screenBuffer->gSizer_Screen->Add(m_captor->m_bitmap_Buffer, 0, wxEXPAND, 5);
     m_captor->mode = Func::Mode::None;
 }
 

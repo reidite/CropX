@@ -18,8 +18,8 @@
 
 //!< Definition of name and default size for the application main frame 
 #define MAINFRAME_NAME "CropX"
-#define MAINFRAME_WIDTH 780
-#define MAINFRAME_HEIGHT 570
+#define MAINFRAME_WIDTH 300
+#define MAINFRAME_HEIGHT 100
 
 namespace UI {
     class MainFrame : public GUIMainFrame
@@ -35,5 +35,7 @@ namespace UI {
         void m_button_ActiveOnButtonClick(wxCommandEvent& event);
     private:
         Func::CaptureMechanism* m_captor;
+
+        GUIScreenPanel* m_screenBuffer;
     };
 }

@@ -18,6 +18,7 @@
 #include <wx/settings.h>
 #include <wx/sizer.h>
 #include <wx/frame.h>
+#include <wx/panel.h>
 
 ///////////////////////////////////////////////////////////////////////////
 
@@ -46,6 +47,23 @@ class GUIMainFrame : public wxFrame
 		GUIMainFrame( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxEmptyString, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 300,100 ), long style = wxDEFAULT_FRAME_STYLE|wxSUNKEN_BORDER );
 		
 		~GUIMainFrame();
+	
+};
+
+///////////////////////////////////////////////////////////////////////////////
+/// Class GUIScreenPanel
+///////////////////////////////////////////////////////////////////////////////
+class GUIScreenPanel : public wxPanel 
+{
+	private:
+	
+	protected:
+	
+	public:
+		wxGridSizer* gSizer_Screen;
+		
+		GUIScreenPanel( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 500,300 ), long style = wxNO_BORDER ); 
+		~GUIScreenPanel();
 	
 };
 

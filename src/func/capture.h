@@ -55,10 +55,7 @@ namespace Func {
     class CaptureMechanism
     {
     private:
-        wxCoord n_displayWidth, n_displayHeight;
         wxString str_defaultDir = "C:/Users/ATOMI-User/Documents/Screenshots";
-
-        wxBitmap* m_bitmap_Buffer;
 
         void CapturingAllScreen();
         void CapturingArea();
@@ -69,25 +66,15 @@ namespace Func {
         void Save(const wxString& fileName);
 
     public:
+        wxBitmap* m_bitmap_Buffer;
+        wxCoord n_displayWidth, n_displayHeight;
         Mode mode = Mode::None;
         CaptureMechanism();
 
         ~CaptureMechanism() { }
 
-        void GrabbingImage() {
-            switch (mode) {
-            case Mode::Full:
-                CapturingAllScreen();
-                break;
-            case Mode::Area:
-                CapturingArea();
-                break;
-            case Mode::Active:
-                CapturingActive();
-                break;
-            default:
-                break;
-            }
-        }
+        wxBitmap* InitiatingRegionSelection();
+
+        void GrabbingImage();
     };
 }

@@ -20,6 +20,7 @@ void Func::CaptureMechanism::CapturingAllScreen() {
 	Save("AAAAAA");
 }
 
+
 void Func::CaptureMechanism::CapturingArea() {
 
 }
@@ -39,9 +40,8 @@ void Func::CaptureMechanism::Capturing(int x, int y, int width, int height, int 
 
 	// Create a DC for the whole screen area
 	wxScreenDC dcScreen;
-	wxCoord screenWidth, screenHeight;
-	dcScreen.GetSize(&screenWidth, &screenHeight);
-	m_bitmap_Buffer = new wxBitmap (screenWidth, screenHeight, -1);
+	dcScreen.GetSize(&n_displayWidth, &n_displayWidth);
+	m_bitmap_Buffer = new wxBitmap (n_displayWidth, n_displayWidth, -1);
 	// Create a memory DC that will be used for actually taking the screenshot
 	wxMemoryDC memDC;
 	memDC.SelectObject(*m_bitmap_Buffer);
@@ -86,4 +86,26 @@ void Func::CaptureMechanism::Save(const wxString& fileName) {
 
 	// save the screenshot as a PNG
 	m_bitmap_Buffer->SaveFile(fullFileName.GetFullPath(), wxBITMAP_TYPE_PNG);
+	free(m_bitmap_Buffer);
+}
+
+wxBitmap* Func::CaptureMechanism::InitiatingRegionSelection() {
+	Capturing(0, 0, n_displayWidth, n_displayHeight, DEFAULT_DELAY);
+	return m_bitmap_Buffer;
+}
+
+void Func::CaptureMechanism::GrabbingImage() {
+	switch (mode) {
+	case Mode::Full:
+		CapturingAllScreen();
+		break;
+	case Mode::Area:
+		CapturingArea();
+		break;
+	case Mode::Active:
+		CapturingActive();
+		break;
+	default:
+		break;
+	}
 }
