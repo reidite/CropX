@@ -40,8 +40,8 @@ void Func::CaptureMechanism::Capturing(int x, int y, int width, int height, int 
 
 	// Create a DC for the whole screen area
 	wxScreenDC dcScreen;
-	dcScreen.GetSize(&n_displayWidth, &n_displayWidth);
-	m_bitmap_Buffer = new wxBitmap (n_displayWidth, n_displayWidth, -1);
+	dcScreen.GetSize(&n_displayWidth, &n_displayHeight);
+	m_bitmap_Buffer = new wxBitmap (n_displayWidth, n_displayHeight, -1);
 	// Create a memory DC that will be used for actually taking the screenshot
 	wxMemoryDC memDC;
 	memDC.SelectObject(*m_bitmap_Buffer);

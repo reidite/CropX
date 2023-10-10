@@ -19,10 +19,12 @@
 #include "wx/string.h"
 #include <vector>
 
+#include "uiautomationcore.h"
+
 #include "wx/gdicmn.h"
 
 //!< Definition of default delay time for the capturing process 
-#define DEFAULT_DELAY 3
+#define DEFAULT_DELAY 1
 
 namespace Func {
     enum Format {

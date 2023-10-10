@@ -11,7 +11,6 @@
 /////////////////////////////////////////////////////////////////////////////
 #include "wx/app.h"
 #include "wx/richtext/richtextxml.h"
-
 #include "ui/Mainframe.h"
 
 //---------------------------------------------------------------------------
@@ -24,7 +23,10 @@ class CropX : public wxApp {
 */
 private:
     //!< Container of the main frame instance
-    UI::MainFrame* mp_frame;
+    UI::MainFrame* mp_frame_MainFrame;
+
+    
+
 public:
     CropX() { }
 
@@ -48,12 +50,10 @@ bool CropX::OnInit() {
     // Add richtext extra handlers (plain text is automatically added)
     wxRichTextBuffer::AddHandler(new wxRichTextXMLHandler);
 
-    mp_frame = new UI::MainFrame();
-    //wxIcon icon("IDI_ICON", 32, 32);
-    // 
-    // 
-    //mp_frame->SetIcon(icon);
-    mp_frame->Show(true);
+    mp_frame_MainFrame = new UI::MainFrame();
+    
+    mp_frame_MainFrame->Show(true);
+
     return true;
 }
 

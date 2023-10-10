@@ -50,17 +50,19 @@ GUIMainFrame::~GUIMainFrame()
 	
 }
 
-GUIScreenPanel::GUIScreenPanel( wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxSize& size, long style ) : wxPanel( parent, id, pos, size, style )
+GUIScreenFrame::GUIScreenFrame( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : wxFrame( parent, id, title, pos, size, style )
 {
-	this->Hide();
+	this->SetSizeHints( wxDefaultSize, wxDefaultSize );
 	
 	gSizer_Screen = new wxGridSizer( 1, 1, 0, 0 );
 	
 	
 	this->SetSizer( gSizer_Screen );
 	this->Layout();
+	
+	this->Centre( wxBOTH );
 }
 
-GUIScreenPanel::~GUIScreenPanel()
+GUIScreenFrame::~GUIScreenFrame()
 {
 }

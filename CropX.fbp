@@ -362,28 +362,35 @@
                 </object>
             </object>
         </object>
-        <object class="Panel" expanded="1">
+        <object class="Frame" expanded="1">
             <property name="aui_managed">0</property>
             <property name="aui_manager_style">wxAUI_MGR_DEFAULT</property>
             <property name="bg"></property>
+            <property name="center">wxBOTH</property>
             <property name="context_help"></property>
             <property name="context_menu">1</property>
             <property name="enabled">1</property>
             <property name="event_handler">impl_virtual</property>
+            <property name="extra_style"></property>
             <property name="fg"></property>
             <property name="font"></property>
-            <property name="hidden">1</property>
+            <property name="hidden">0</property>
             <property name="id">wxID_ANY</property>
             <property name="maximum_size"></property>
             <property name="minimum_size"></property>
-            <property name="name">GUIScreenPanel</property>
+            <property name="name">GUIScreenFrame</property>
             <property name="pos"></property>
-            <property name="size">500,300</property>
+            <property name="size">631,392</property>
+            <property name="style">wxFRAME_NO_TASKBAR|wxMAXIMIZE_BOX</property>
             <property name="subclass"></property>
+            <property name="title"></property>
             <property name="tooltip"></property>
             <property name="window_extra_style"></property>
             <property name="window_name"></property>
             <property name="window_style">wxNO_BORDER</property>
+            <property name="xrc_skip_sizer">1</property>
+            <event name="OnActivate"></event>
+            <event name="OnActivateApp"></event>
             <event name="OnAuiFindManager"></event>
             <event name="OnAuiPaneButton"></event>
             <event name="OnAuiPaneClose"></event>
@@ -391,9 +398,12 @@
             <event name="OnAuiPaneRestore"></event>
             <event name="OnAuiRender"></event>
             <event name="OnChar"></event>
+            <event name="OnClose"></event>
             <event name="OnEnterWindow"></event>
             <event name="OnEraseBackground"></event>
-            <event name="OnInitDialog"></event>
+            <event name="OnHibernate"></event>
+            <event name="OnIconize"></event>
+            <event name="OnIdle"></event>
             <event name="OnKeyDown"></event>
             <event name="OnKeyUp"></event>
             <event name="OnKillFocus"></event>

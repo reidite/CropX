@@ -10,7 +10,10 @@
 // Licence:         GPL-3.0 license
 /////////////////////////////////////////////////////////////////////////////
 #pragma once
+#include <wx/statbmp.h>
+
 #include "GUI.h"
+#include "ScreenPanel.h"
 #include "../func/capture.h"
 //---------------------------------------------------------------------------
 // MainFrame
@@ -25,6 +28,8 @@ namespace UI {
     class MainFrame : public GUIMainFrame
     {
     public:
+        Func::CaptureMechanism* m_captor;
+
         MainFrame();
         ~MainFrame() {}
 
@@ -34,8 +39,9 @@ namespace UI {
         void m_button_AreaOnButtonClick(wxCommandEvent& event);
         void m_button_ActiveOnButtonClick(wxCommandEvent& event);
     private:
-        Func::CaptureMechanism* m_captor;
-
-        GUIScreenPanel* m_screenBuffer;
+        std::vector<UI::ScreenFrame*> mp_frame_ScreenFrames;
+        std::vector<wxStaticBitmap*> m_bitmap_Screens;
+        void ShowingScreenFrames();
+        void HiddingScreenFrames();
     };
 }
