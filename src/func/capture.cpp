@@ -16,7 +16,7 @@ Func::CaptureMechanism::CaptureMechanism() {
 }
 
 void Func::CaptureMechanism::CapturingAllScreen() {
-	Capturing(0, 0, n_displayWidth, n_displayHeight, DEFAULT_DELAY);
+	Capturing(DEFAULT_DELAY);
 	Save("AAAAAA");
 }
 
@@ -29,14 +29,14 @@ void Func::CaptureMechanism::CapturingActive() {
 
 }
 
-void Func::CaptureMechanism::Capturing(int x, int y, int width, int height, int delay) {
+void Func::CaptureMechanism::Capturing(int delay) {
 #ifdef __WXMAC__
 
 #else
 	if (delay) Delay(delay);
 	free(m_bitmap_Buffer);
 	m_bitmap_Buffer = new wxBitmap();
-	m_bitmap_Buffer->Create(width, height);
+	m_bitmap_Buffer->Create(n_displayWidth, n_displayWidth);
 
 	// Create a DC for the whole screen area
 	wxScreenDC dcScreen;
@@ -50,16 +50,23 @@ void Func::CaptureMechanism::Capturing(int x, int y, int width, int height, int 
 	// Blit the actual screen on the memory DC
 	memDC.Blit(0, // Copy to this X coordinate
 		0, // Copy to this Y coordinate
-		width, // Copy this width
-		height, // Copy this height
+		n_displayWidth, // Copy this width
+		n_displayWidth, // Copy this height
 		&dcScreen, // From where do we copy?
-		x, // What's the X offset in the original DC?
-		y  // What's the Y offset in the original DC?
+		0, // What's the X offset in the original DC?
+		0  // What's the Y offset in the original DC?
 	);
 
 	//// Select the Bitmap out of the memory DC
 	memDC.SelectObject(wxNullBitmap);
 #endif __WXMAC__
+}
+
+void Func::CaptureMechanism::Cropping(int x, int y, int width, int height) {
+	wxBitmap m_tmpBitmap = m_bitmap_Buffer->GetSubBitmap(wxRect(wxPoint(x, y), wxSize(width, height)));
+	free(m_bitmap_Buffer);
+	m_bitmap_Buffer = &m_tmpBitmap;
+	Save("AAAAAA");
 }
 
 void Func::CaptureMechanism::Union() {
@@ -89,9 +96,8 @@ void Func::CaptureMechanism::Save(const wxString& fileName) {
 	free(m_bitmap_Buffer);
 }
 
-wxBitmap* Func::CaptureMechanism::InitiatingRegionSelection() {
-	Capturing(0, 0, n_displayWidth, n_displayHeight, DEFAULT_DELAY);
-	return m_bitmap_Buffer;
+void Func::CaptureMechanism::InitiatingRegionSelection() {
+	Capturing(DEFAULT_DELAY);
 }
 
 void Func::CaptureMechanism::GrabbingImage() {

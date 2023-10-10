@@ -10,10 +10,13 @@
 // Licence:         GPL-3.0 license
 /////////////////////////////////////////////////////////////////////////////
 #pragma once
+#include <thread>
+
 #include <wx/statbmp.h>
 
 #include "GUI.h"
 #include "ScreenPanel.h"
+#include "SelectPanel.h"
 #include "../func/capture.h"
 //---------------------------------------------------------------------------
 // MainFrame
@@ -41,7 +44,14 @@ namespace UI {
     private:
         std::vector<UI::ScreenFrame*> mp_frame_ScreenFrames;
         std::vector<wxStaticBitmap*> m_bitmap_Screens;
+
+        Custom::SelectPanel* mp_frame_SelectFrame;
+
+        std::atomic<bool>  atomic_b_croppingScreenInProcessed = true;
+        std::thread* pthrd_SreenCropper;
         void ShowingScreenFrames();
         void HiddingScreenFrames();
+        void InitializingCroppingThread();
+        void GettingCaptureArea();
     };
 }

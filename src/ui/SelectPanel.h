@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:            main.cpp
+// Name:            SelectPanel.cpp
 // Purpose:         Initialize the entry point of the program
 // Author:          Vincent Nguyen
 // Maintainer:      Vincent Nguyen
@@ -10,22 +10,25 @@
 // Licence:         GPL-3.0 license
 /////////////////////////////////////////////////////////////////////////////
 #pragma once
+#include <atomic>
+
 #include "GUI.h"
-#include "wx/display.h"
 
-namespace UI {
-	class ScreenFrame : public GUIScreenFrame
+namespace UI
+{
+	namespace Custom
 	{
-	private:
+		class SelectPanel : public GUISelectFrame
+		{
+		private:
 
-	protected:
+		protected:
+			void GUISelectFrameOnClose(wxCloseEvent& event);
 
-	public:
-		int n_width;
-		int n_height;
-		ScreenFrame(int x, int y, int width, int height);
-		~ScreenFrame() {}
+		public:
+			std::atomic<bool>  atomic_b_croppingScreenIsRaised = false;
 
-
-	};
+			SelectPanel();
+		};
+	}
 }

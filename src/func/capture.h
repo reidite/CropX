@@ -62,7 +62,8 @@ namespace Func {
         void CapturingAllScreen();
         void CapturingArea();
         void CapturingActive();
-        void Capturing(int x, int y, int width, int height, int delay);
+        void Capturing(int delay);
+        
         void Union();
         void Delay(int seconds);
         void Save(const wxString& fileName);
@@ -75,8 +76,8 @@ namespace Func {
 
         ~CaptureMechanism() { }
 
-        wxBitmap* InitiatingRegionSelection();
-
+        void InitiatingRegionSelection();
+        void Cropping(int x, int y, int width, int height);
         void GrabbingImage();
     };
 }

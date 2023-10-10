@@ -16,9 +16,6 @@
     <Filter Include="Source Files\ui">
       <UniqueIdentifier>{a6ccd196-0cb3-4cec-9f6b-db438a37eecf}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\ui\custom">
-      <UniqueIdentifier>{fff99c8c-6ef3-41de-834a-d0ec573f77bf}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\func">
       <UniqueIdentifier>{ec12a600-b311-4b73-b76e-e74132809d02}</UniqueIdentifier>
     </Filter>
@@ -39,6 +36,9 @@
     <ClCompile Include="src\ui\ScreenPanel.cpp">
       <Filter>Source Files\ui</Filter>
     </ClCompile>
+    <ClCompile Include="src\ui\SelectPanel.cpp">
+      <Filter>Source Files\ui</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\ui\GUI.h">
@@ -51,6 +51,9 @@
       <Filter>Source Files\func</Filter>
     </ClInclude>
     <ClInclude Include="src\ui\ScreenPanel.h">
+      <Filter>Source Files\ui</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ui\SelectPanel.h">
       <Filter>Source Files\ui</Filter>
     </ClInclude>
   </ItemGroup>

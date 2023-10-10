@@ -159,12 +159,14 @@
     <ClCompile Include="src\ui\GUI.cpp" />
     <ClCompile Include="src\ui\MainFrame.cpp" />
     <ClCompile Include="src\ui\ScreenPanel.cpp" />
+    <ClCompile Include="src\ui\SelectPanel.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\func\capture.h" />
     <ClInclude Include="src\ui\GUI.h" />
     <ClInclude Include="src\ui\MainFrame.h" />
     <ClInclude Include="src\ui\ScreenPanel.h" />
+    <ClInclude Include="src\ui\SelectPanel.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

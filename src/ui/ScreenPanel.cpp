@@ -8,7 +8,7 @@
 // ----------------------------------------------------------------------------
 
 UI::ScreenFrame::ScreenFrame(int x, int y, int width, int height)
-    : GUIScreenFrame(nullptr, wxID_ANY, wxString(""), wxPoint(x, y), wxSize(width, height))
+    : GUIScreenFrame(nullptr, wxID_ANY, wxEmptyString, wxPoint(x, y), wxSize(width, height))
 {
     n_width = width;
     n_height = height;
