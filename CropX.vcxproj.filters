@@ -39,6 +39,9 @@
     <ClCompile Include="src\ui\SelectPanel.cpp">
       <Filter>Source Files\ui</Filter>
     </ClCompile>
+    <ClCompile Include="src\func\provider.cpp">
+      <Filter>Source Files\func</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\ui\GUI.h">
@@ -55,6 +58,9 @@
     </ClInclude>
     <ClInclude Include="src\ui\SelectPanel.h">
       <Filter>Source Files\ui</Filter>
+    </ClInclude>
+    <ClInclude Include="src\func\provider.h">
+      <Filter>Source Files\func</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -18,6 +18,8 @@
 #include "ScreenPanel.h"
 #include "SelectPanel.h"
 #include "../func/capture.h"
+#include "../func/provider.h"
+#include "uiautomationcore.h"
 //---------------------------------------------------------------------------
 // MainFrame
 //---------------------------------------------------------------------------
@@ -32,6 +34,7 @@ namespace UI {
     {
     public:
         Func::CaptureMechanism* m_captor;
+        Func::Provider* m_provider;
 
         MainFrame();
         ~MainFrame() {}
@@ -47,11 +50,13 @@ namespace UI {
 
         Custom::SelectPanel* mp_frame_SelectFrame;
 
-        std::atomic<bool>  atomic_b_croppingScreenInProcessed = true;
         std::thread* pthrd_SreenCropper;
+        std::thread* pthrd_SreenActiveSelector;
+
         void ShowingScreenFrames();
         void HiddingScreenFrames();
         void InitializingCroppingThread();
+        void InitializingActiveThread();
         void GettingCaptureArea();
     };
 }

@@ -93,7 +93,7 @@ void Func::CaptureMechanism::Save(const wxString& fileName) {
 
 	// save the screenshot as a PNG
 	m_bitmap_Buffer->SaveFile(fullFileName.GetFullPath(), wxBITMAP_TYPE_PNG);
-	free(m_bitmap_Buffer);
+	m_bitmap_Buffer->FreeResource(true);
 }
 
 void Func::CaptureMechanism::InitiatingRegionSelection() {
