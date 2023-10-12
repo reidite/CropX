@@ -245,7 +245,7 @@ void UI::Custom::SelectPanel::CompleteResize(bool doFinalResize)
 void UI::Custom::SelectPanel::OnBgPanelPaint(wxPaintEvent&)
 {
     wxAutoBufferedPaintDC dc(m_bgPanel);
-
+ 
     dc.Clear();
     wxPen pen(wxColor(152, 0, 0), 5);
     dc.SetPen(pen);
