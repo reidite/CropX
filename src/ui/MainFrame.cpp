@@ -86,8 +86,14 @@ void UI::MainFrame::GettingDPIScreenFrames() {
         UINT dpiX = 0;
         UINT dpiY = 0;
         GetDpiForMonitor(monitors[i], MDT_EFFECTIVE_DPI, &dpiX, &dpiY);
-        mp_frame_ScreenFrames[i]->pn_dpi.first = dpiX;
-        mp_frame_ScreenFrames[i]->pn_dpi.second = dpiY;
+        mp_frame_ScreenFrames[i]->pn_effectiveDPI.first = dpiX;
+        mp_frame_ScreenFrames[i]->pn_effectiveDPI.second = dpiY;
+        GetDpiForMonitor(monitors[i], MDT_ANGULAR_DPI, &dpiX, &dpiY);
+        mp_frame_ScreenFrames[i]->pn_angularDPI.first = dpiX;
+        mp_frame_ScreenFrames[i]->pn_angularDPI.second = dpiY;
+        GetDpiForMonitor(monitors[i], MDT_RAW_DPI, &dpiX, &dpiY);
+        mp_frame_ScreenFrames[i]->pn_rawDPI.first = dpiX;
+        mp_frame_ScreenFrames[i]->pn_rawDPI.second = dpiY;
     }
 }
 

@@ -24,7 +24,9 @@ namespace UI {
 		int n_width;
 		int n_height;
 
-		std::pair<unsigned int, unsigned int> pn_dpi;
+		std::pair<unsigned int, unsigned int> pn_effectiveDPI;
+		std::pair<unsigned int, unsigned int> pn_angularDPI;
+		std::pair<unsigned int, unsigned int> pn_rawDPI;
 
 		ScreenFrame(int x, int y, int width, int height);
 		~ScreenFrame() {}
