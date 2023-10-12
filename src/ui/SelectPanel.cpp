@@ -15,7 +15,7 @@ UI::Custom::SelectPanel::SelectPanel()
 
     // Initialize the data needed for resizing.
     m_resizeMode = RESIZE_MODE::None;
-    m_resizeAreaLength = FromDIP(DEFAULT_RED_MARK_SIZE);
+    m_resizeAreaLength = FromDIP(RESIZE_AREA_SIZE);
 
 
     m_resizeTimer.Bind(wxEVT_TIMER, &SelectPanel::OnResizeTimer, this);
@@ -25,7 +25,7 @@ UI::Custom::SelectPanel::SelectPanel()
     // Set window and event handlers for resizing from upper right.
     m_clickToResizeFromUpperRightWindow = m_bgPanel;
     m_clickToResizeFromUpperRightWindow->Bind(wxEVT_LEFT_DOWN,
-        &SelectPanel::OnLeftDownForResizeFromLowerRight, this);
+        &SelectPanel::OnLeftDownForResizeFromUpperRight, this);
     m_clickToResizeFromUpperRightWindow->Bind(wxEVT_LEFT_UP,
         &SelectPanel::OnLeftUp, this);
     m_clickToResizeFromUpperRightWindow->Bind(wxEVT_MOUSE_CAPTURE_LOST,
@@ -34,7 +34,7 @@ UI::Custom::SelectPanel::SelectPanel()
     // Set window and event handlers for resizing from upper left.
     m_clickToResizeFromUpperLeftWindow = m_bgPanel;
     m_clickToResizeFromUpperLeftWindow->Bind(wxEVT_LEFT_DOWN,
-        &SelectPanel::OnLeftDownForResizeFromLowerLeft, this);
+        &SelectPanel::OnLeftDownForResizeFromUpperLeft, this);
     m_clickToResizeFromUpperLeftWindow->Bind(wxEVT_LEFT_UP,
         &SelectPanel::OnLeftUp, this);
     m_clickToResizeFromUpperLeftWindow->Bind(wxEVT_MOUSE_CAPTURE_LOST,
@@ -71,12 +71,12 @@ void UI::Custom::SelectPanel::OnLeftDownForResizeFromUpperLeft(wxMouseEvent& eve
 
     // Check if the click is in the lower left of the window.
     if (p.x < m_resizeAreaLength &&
-        sz.GetHeight() - p.y < m_resizeAreaLength)
+        p.y < m_resizeAreaLength)
     {
         StartResize(m_clickToResizeFromUpperLeftWindow, p);
 
-        m_resizeMode = RESIZE_MODE::FromLowerLeft;
-        SetTitle("Resize From upper left in progress...");
+        m_resizeMode = RESIZE_MODE::FromUpperLeft;
+
         SetCursor(wxCursor(wxCURSOR_SIZENESW));
     }
     else
@@ -92,11 +92,11 @@ void UI::Custom::SelectPanel::OnLeftDownForResizeFromUpperRight(wxMouseEvent& ev
 
     // Check if the click is in the lower right of the window.
     if (sz.GetWidth() - p.x < m_resizeAreaLength &&
-        sz.GetHeight() - p.y < m_resizeAreaLength)
+        p.y < m_resizeAreaLength)
     {
         StartResize(m_clickToResizeFromUpperRightWindow, p);
 
-        m_resizeMode = RESIZE_MODE::FromLowerRight;
+        m_resizeMode = RESIZE_MODE::FromUpperRight;
 
         SetCursor(wxCursor(wxCURSOR_SIZENWSE));
     }
@@ -118,7 +118,7 @@ void UI::Custom::SelectPanel::OnLeftDownForResizeFromLowerLeft(wxMouseEvent& eve
         StartResize(m_clickToResizeFromLowerLeftWindow, p);
 
         m_resizeMode = RESIZE_MODE::FromLowerLeft;
-        SetTitle("Resize From lower left in progress...");
+
         SetCursor(wxCursor(wxCURSOR_SIZENESW));
     }
     else
@@ -184,10 +184,16 @@ void UI::Custom::SelectPanel::DoDragBasedResize()
 
     switch (m_resizeMode) {
     case RESIZE_MODE::FromUpperRight:
+        newSize = wxSize(m_initialFrameSize.GetWidth() + dragVector.x,
+            m_initialFrameSize.GetHeight() - dragVector.y);
+        newPsn = wxPoint(m_initialFramePosition.x,
+            m_initialFramePosition.y + dragVector.y);
         break;
     case RESIZE_MODE::FromUpperLeft:
+        newSize = wxSize(m_initialFrameSize.GetWidth() - dragVector.x,
+            m_initialFrameSize.GetHeight() - dragVector.y);
         newPsn = wxPoint(m_initialFramePosition.x + dragVector.x,
-            m_initialFramePosition.y);
+            m_initialFramePosition.y + dragVector.y);
         break;
     case RESIZE_MODE::FromLowerRight:
         newSize = wxSize(m_initialFrameSize.GetWidth() + dragVector.x,

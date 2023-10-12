@@ -15,7 +15,7 @@
 #else
 #define BORDERLESS_FRAME_STYLE (wxFRAME_NO_TASKBAR | wxBORDER_NONE)
 #endif
-#define DEFAULT_RED_MARK_SIZE 15
+#define RESIZE_AREA_SIZE 15
 
 #include <atomic>
 #include "wx/wx.h"
