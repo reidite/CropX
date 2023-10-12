@@ -18,6 +18,7 @@ UI::MainFrame::MainFrame()
         wxRect screen = display.GetGeometry();
         mp_frame_ScreenFrames.push_back(nullptr);
         mp_frame_ScreenFrames[i] = new UI::ScreenFrame(screen.x, screen.y, screen.width, screen.height);
+        mp_frame_ScreenFrames[i]->Show(false);
     }
 
     mp_frame_SelectFrame = new Custom::SelectPanel();
@@ -74,7 +75,7 @@ void UI::MainFrame::ShowingScreenFrames() {
         mp_frame_ScreenFrames[i]->m_bitmap_Screen->SetBitmap(wxBitmapBundle::FromBitmap(tmp_Bitmap));
 
         posX += disSize.x;
-        mp_frame_ScreenFrames[i]->ShowFullScreen(true);
+        mp_frame_ScreenFrames[i]->Show(true);
     }
 }
 
@@ -90,7 +91,7 @@ void UI::MainFrame::InitializingCroppingThread() {
 		GettingCaptureArea();
 		mp_frame_SelectFrame->atomic_b_croppingScreenIsRaised = false;
         for (int i = 0; i < wxDisplay::GetCount(); i++) {
-            mp_frame_ScreenFrames[i]->ShowFullScreen(false);
+            mp_frame_ScreenFrames[i]->Show(false);
         }
         mp_frame_SelectFrame->atomic_b_croppingScreenIsRaised = false;
 	});
