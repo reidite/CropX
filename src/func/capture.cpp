@@ -36,11 +36,10 @@ void Func::CaptureMechanism::CapturingActive() {
 }
 
 void Func::CaptureMechanism::GrabbingScreenshot(int delay) {
-#ifdef __WXMAC__
-
-#else
+#ifdef _WIN32
+	//windows code goes here
 	if (delay) Delay(delay);
-	
+
 	// Create a DC for the whole screen area
 	wxScreenDC dcScreen;
 	dcScreen.GetSize(&n_displayWidth, &n_displayHeight);
@@ -61,7 +60,16 @@ void Func::CaptureMechanism::GrabbingScreenshot(int delay) {
 
 	//// Select the Bitmap out of the memory DC
 	memDC.SelectObject(wxNullBitmap);
-#endif __WXMAC__
+#elif __linux__
+	//linux  code goes here
+
+#elif __WXMAC__
+	//mac code goes here
+
+#else
+
+#endif
+
 }
 
 void Func::CaptureMechanism::Crop(int x, int y, int width, int height) {

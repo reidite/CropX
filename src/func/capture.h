@@ -25,7 +25,7 @@
 
 
 #include "shlobj_core.h"
-
+#include "shellscalingapi.h"
 #include "uiautomationcore.h"
 
 #include "wx/gdicmn.h"
@@ -80,7 +80,9 @@ namespace Func {
         wxBitmap m_bitmap_Buffer;
         wxBitmap m_bitmap_Saved;
         
-        
+        unsigned int dpiX;
+        unsigned int dpiY;
+
         CaptureMechanism();
 
         ~CaptureMechanism() { }

@@ -19,7 +19,25 @@
 #include "SelectPanel.h"
 #include "../func/capture.h"
 #include "../func/provider.h"
+
+
+#ifdef _WIN32
+//windows code goes here
+#include "windows.h"
 #include "uiautomationcore.h"
+#include "shellscalingapi.h"
+
+#elif __linux__
+//linux  code goes here
+
+#elif __WXMAC__
+//mac code goes here
+
+#else
+
+#endif
+
+
 //---------------------------------------------------------------------------
 // MainFrame
 //---------------------------------------------------------------------------
@@ -53,6 +71,7 @@ namespace UI {
         std::thread* pthrd_SreenCropper;
         std::thread* pthrd_SreenActiveSelector;
 
+        void GettingDPIScreenFrames();
         void ShowingScreenFrames();
         void ResetingSelectFrameProperties();
         void InitializingCroppingThread();

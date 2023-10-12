@@ -15,15 +15,17 @@ UI::MainFrame::MainFrame()
 
     for (int i = 0; i < wxDisplay::GetCount(); i++) {
         wxDisplay display(i);
+        ;
         wxRect screen = display.GetGeometry();
         mp_frame_ScreenFrames.push_back(nullptr);
         mp_frame_ScreenFrames[i] = new UI::ScreenFrame(screen.x, screen.y, screen.width, screen.height);
         mp_frame_ScreenFrames[i]->Show(false);
     }
 
+    GettingDPIScreenFrames();
+
     mp_frame_SelectFrame = new Custom::SelectPanel();
 
-    
     // Set minimum size hints
     GetSizer()->SetSizeHints(this);
 }
@@ -64,6 +66,29 @@ void UI::MainFrame::m_bpButton_ActiveOnButtonClick(wxCommandEvent& event)
     m_captor->Capture();
     ResetingSelectFrameProperties();
     InitializingActiveThread();
+}
+
+void UI::MainFrame::GettingDPIScreenFrames() {
+    std::vector<std::pair<int, int>> dpiValues;
+
+    std::vector<HMONITOR> monitors;
+    auto monitorEnumProc = [](HMONITOR hMonitor, HDC hdcMonitor, LPRECT lprcMonitor, LPARAM dwData) -> BOOL
+    {
+        // Add the monitor handle to the vector
+        std::vector<HMONITOR>* monitorHandles = reinterpret_cast<std::vector<HMONITOR>*>(dwData);
+        monitorHandles->push_back(hMonitor);
+
+        return TRUE;
+    };
+    EnumDisplayMonitors(NULL, NULL, monitorEnumProc, reinterpret_cast<LPARAM>(&monitors));
+
+    for (int i = 0; i < monitors.size(); i++) {
+        UINT dpiX = 0;
+        UINT dpiY = 0;
+        GetDpiForMonitor(monitors[i], MDT_EFFECTIVE_DPI, &dpiX, &dpiY);
+        mp_frame_ScreenFrames[i]->pn_dpi.first = dpiX;
+        mp_frame_ScreenFrames[i]->pn_dpi.second = dpiY;
+    }
 }
 
 void UI::MainFrame::ShowingScreenFrames() {
