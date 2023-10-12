@@ -19,6 +19,9 @@
     <Filter Include="Source Files\func">
       <UniqueIdentifier>{ec12a600-b311-4b73-b76e-e74132809d02}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\ui\custom">
+      <UniqueIdentifier>{436e2216-765e-43be-9be3-3e378bdfc0da}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\main.cpp">
@@ -42,6 +45,9 @@
     <ClCompile Include="src\func\provider.cpp">
       <Filter>Source Files\func</Filter>
     </ClCompile>
+    <ClCompile Include="src\ui\custom\frame.cpp">
+      <Filter>Source Files\ui\custom</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\ui\GUI.h">
@@ -62,5 +68,27 @@
     <ClInclude Include="src\func\provider.h">
       <Filter>Source Files\func</Filter>
     </ClInclude>
+    <ClInclude Include="resource.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ui\custom\frame.h">
+      <Filter>Source Files\ui\custom</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="CropX.rc">
+      <Filter>Resource Files</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="src\res\active.big.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="src\res\area.big.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="src\res\full.big.png">
+      <Filter>Resource Files</Filter>
+    </Image>
   </ItemGroup>
 </Project>

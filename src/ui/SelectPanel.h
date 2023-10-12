@@ -12,6 +12,8 @@
 #pragma once
 #include <atomic>
 
+#include <wx/dcbuffer.h>
+
 #include "GUI.h"
 
 namespace UI
@@ -24,6 +26,7 @@ namespace UI
 
 		protected:
 			void GUISelectFrameOnClose(wxCloseEvent& event);
+			void OnPaint(wxPaintEvent &event);
 
 		public:
 			std::atomic<bool>  atomic_b_croppingScreenIsRaised = false;

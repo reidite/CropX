@@ -18,14 +18,20 @@ GUIMainFrame::GUIMainFrame( wxWindow* parent, wxWindowID id, const wxString& tit
 	wxGridSizer* gSizer5;
 	gSizer5 = new wxGridSizer( 1, 3, 0, 0 );
 	
-	m_button_Full = new wxButton( this, wxID_ANY, wxT("Full"), wxDefaultPosition, wxDefaultSize, 0 );
-	gSizer5->Add( m_button_Full, 0, wxEXPAND, 10 );
+	m_bpButton_Full = new wxBitmapButton( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
+	m_bpButton_Full->SetMinSize( wxSize( 30,30 ) );
 	
-	m_button_Area = new wxButton( this, wxID_ANY, wxT("Area"), wxDefaultPosition, wxDefaultSize, 0 );
-	gSizer5->Add( m_button_Area, 0, wxEXPAND, 10 );
+	gSizer5->Add( m_bpButton_Full, 0, wxEXPAND, 5 );
 	
-	m_button_Active = new wxButton( this, wxID_ANY, wxT("Active"), wxDefaultPosition, wxDefaultSize, 0 );
-	gSizer5->Add( m_button_Active, 0, wxEXPAND, 5 );
+	m_bpButton_Area = new wxBitmapButton( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
+	m_bpButton_Area->SetMinSize( wxSize( 30,30 ) );
+	
+	gSizer5->Add( m_bpButton_Area, 0, wxEXPAND, 5 );
+	
+	m_bpButton_Active = new wxBitmapButton( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
+	m_bpButton_Active->SetMinSize( wxSize( 30,30 ) );
+	
+	gSizer5->Add( m_bpButton_Active, 0, wxEXPAND, 5 );
 	
 	
 	this->SetSizer( gSizer5 );
@@ -35,18 +41,18 @@ GUIMainFrame::GUIMainFrame( wxWindow* parent, wxWindowID id, const wxString& tit
 	
 	// Connect Events
 	this->Connect( wxEVT_CLOSE_WINDOW, wxCloseEventHandler( GUIMainFrame::MainFrameUIOnClose ) );
-	m_button_Full->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( GUIMainFrame::m_button_FullOnButtonClick ), NULL, this );
-	m_button_Area->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( GUIMainFrame::m_button_AreaOnButtonClick ), NULL, this );
-	m_button_Active->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( GUIMainFrame::m_button_ActiveOnButtonClick ), NULL, this );
+	m_bpButton_Full->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( GUIMainFrame::m_bpButton_FullOnButtonClick ), NULL, this );
+	m_bpButton_Area->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( GUIMainFrame::m_bpButton_AreaOnButtonClick ), NULL, this );
+	m_bpButton_Active->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( GUIMainFrame::m_bpButton_ActiveOnButtonClick ), NULL, this );
 }
 
 GUIMainFrame::~GUIMainFrame()
 {
 	// Disconnect Events
 	this->Disconnect( wxEVT_CLOSE_WINDOW, wxCloseEventHandler( GUIMainFrame::MainFrameUIOnClose ) );
-	m_button_Full->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( GUIMainFrame::m_button_FullOnButtonClick ), NULL, this );
-	m_button_Area->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( GUIMainFrame::m_button_AreaOnButtonClick ), NULL, this );
-	m_button_Active->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( GUIMainFrame::m_button_ActiveOnButtonClick ), NULL, this );
+	m_bpButton_Full->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( GUIMainFrame::m_bpButton_FullOnButtonClick ), NULL, this );
+	m_bpButton_Area->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( GUIMainFrame::m_bpButton_AreaOnButtonClick ), NULL, this );
+	m_bpButton_Active->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( GUIMainFrame::m_bpButton_ActiveOnButtonClick ), NULL, this );
 	
 }
 

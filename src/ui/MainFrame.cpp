@@ -34,38 +34,37 @@ UI::MainFrame::MainFrame()
 
 void UI::MainFrame::MainFrameUIOnClose(wxCloseEvent& event)
 {
-
     Destroy();
+    exit(0);
 }
 
 
-void UI::MainFrame::m_button_FullOnButtonClick(wxCommandEvent& event)
+void UI::MainFrame::m_bpButton_FullOnButtonClick(wxCommandEvent& event)
 {
-    m_captor->mode = Func::Mode::Full;
-    m_captor->GrabbingImage();
-    
-    m_captor->mode = Func::Mode::None;
+    m_captor->m_capturingMode = Func::Mode::Full;
+    m_captor->Capture();
+    m_captor->m_capturingMode = Func::Mode::None;
 }
 
-void UI::MainFrame::m_button_AreaOnButtonClick(wxCommandEvent& event)
+void UI::MainFrame::m_bpButton_AreaOnButtonClick(wxCommandEvent& event)
 {
-    m_captor->mode = Func::Mode::Area;
     this->Show(false);
-    m_captor->InitiatingRegionSelection();
+    m_captor->m_capturingMode = Func::Mode::Area;
+    m_captor->Capture();
     ShowingScreenFrames();
     InitializingCroppingThread();
 }
 
-void UI::MainFrame::m_button_ActiveOnButtonClick(wxCommandEvent& event)
+void UI::MainFrame::m_bpButton_ActiveOnButtonClick(wxCommandEvent& event)
 {
-    m_captor->mode = Func::Mode::Active;
     this->Show(false);
-    m_captor->InitiatingRegionSelection();
+    m_captor->m_capturingMode = Func::Mode::Active;
+    
+    m_captor->Capture();
     mp_frame_SelectFrame->SetPosition(wxPoint(30, 30));
-    mp_frame_SelectFrame->SetSize(wxSize(50, 50));
+    mp_frame_SelectFrame->SetSize(wxSize(100, 100));
     mp_frame_SelectFrame->Show(true);
     InitializingActiveThread();
-    m_captor->mode = Func::Mode::None;
 }
 
 void UI::MainFrame::ShowingScreenFrames() {
@@ -73,7 +72,7 @@ void UI::MainFrame::ShowingScreenFrames() {
     for (int i = 0; i < wxDisplay::GetCount(); i++) {
         wxSize disSize = wxSize(mp_frame_ScreenFrames[i]->n_width,
             mp_frame_ScreenFrames[i]->n_height);
-        const wxBitmap tmp_Bitmap = m_captor->m_bitmap_Buffer->GetSubBitmap(wxRect(wxPoint(posX, posY), disSize));
+        const wxBitmap tmp_Bitmap = m_captor->m_bitmap_Buffer.GetSubBitmap(wxRect(wxPoint(posX, posY), disSize));
         m_bitmap_Screens[i] = new wxStaticBitmap(mp_frame_ScreenFrames[i],
             wxID_ANY,
             wxBitmapBundle::FromBitmap(tmp_Bitmap),
@@ -87,13 +86,6 @@ void UI::MainFrame::ShowingScreenFrames() {
     mp_frame_SelectFrame->SetPosition(wxPoint(30, 30));
     mp_frame_SelectFrame->SetSize(wxSize(50, 50));
     mp_frame_SelectFrame->Show(true);
-}
-
-void UI::MainFrame::HiddingScreenFrames() {
-    mp_frame_SelectFrame->Show(false);
-    for (int i = 0; i < wxDisplay::GetCount(); i++) {
-        mp_frame_ScreenFrames[i]->ShowFullScreen(false);
-    }
 }
 
 void UI::MainFrame::InitializingCroppingThread() {
@@ -113,13 +105,13 @@ void UI::MainFrame::InitializingActiveThread() {
     pthrd_SreenActiveSelector = new std::thread([&]() {
         while (!(mp_frame_SelectFrame->atomic_b_croppingScreenIsRaised)) {
             wxPoint cursorPos = wxGetMousePosition();
-            if (m_provider->GetActiveComponent(cursorPos.x, cursorPos.y)) {
+            if (SUCCEEDED(m_provider->GetActiveComponent(cursorPos.x, cursorPos.y))) {
                 mp_frame_SelectFrame->SetPosition(wxPoint(m_provider->n_x, 
                                                             m_provider->n_y));
                 mp_frame_SelectFrame->SetSize(wxSize(m_provider->width, 
                                                         m_provider->height));
             }
-            Sleep(2000);
+            Sleep(DEFAULT_ACTIVE_DELAY);
         }
         GettingCaptureArea();
         mp_frame_SelectFrame->atomic_b_croppingScreenIsRaised = false;
@@ -130,10 +122,10 @@ void UI::MainFrame::GettingCaptureArea() {
     int x, y, width, height;
     mp_frame_SelectFrame->GetPosition(&x, &y);
     mp_frame_SelectFrame->GetSize(&width, &height);
-    m_captor->Cropping(x, y, width, height);
+    m_captor->Crop(x, y, width, height);
 
     mp_frame_SelectFrame->Show(false);
     this->Show(true);
-    m_captor->mode = Func::Mode::None;
+    m_captor->m_capturingMode = Func::Mode::None;
 }
 

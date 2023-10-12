@@ -10,14 +10,21 @@
 // Licence:         GPL-3.0 license
 /////////////////////////////////////////////////////////////////////////////
 #pragma once
-
 #include "wx/bitmap.h"
 #include "wx/filename.h"
 #include "wx/notebook.h"
 #include "wx/dcscreen.h"
 #include "wx/dcmemory.h"
 #include "wx/string.h"
+
+#include <string>
 #include <vector>
+#include <iomanip>
+#include <ctime>
+#include <sstream>
+
+
+#include "shlobj_core.h"
 
 #include "uiautomationcore.h"
 
@@ -57,27 +64,31 @@ namespace Func {
     class CaptureMechanism
     {
     private:
-        wxString str_defaultDir = "C:/Users/ATOMI-User/Documents/Screenshots";
+        wxString str_defaultDir;
 
         void CapturingAllScreen();
         void CapturingArea();
         void CapturingActive();
-        void Capturing(int delay);
+
+        void GrabbingScreenshot(int delay);
         
         void Union();
         void Delay(int seconds);
-        void Save(const wxString& fileName);
+        void Save();
 
     public:
-        wxBitmap* m_bitmap_Buffer;
-        wxCoord n_displayWidth, n_displayHeight;
-        Mode mode = Mode::None;
+        wxBitmap m_bitmap_Buffer;
+        wxBitmap m_bitmap_Saved;
+        
+        
         CaptureMechanism();
 
         ~CaptureMechanism() { }
 
-        void InitiatingRegionSelection();
-        void Cropping(int x, int y, int width, int height);
-        void GrabbingImage();
+        wxCoord n_displayWidth, n_displayHeight;
+        void Crop(int x, int y, int width, int height);
+        
+        Mode m_capturingMode = Mode::None;
+        void Capture();
     };
 }

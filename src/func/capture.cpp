@@ -12,39 +12,41 @@
 Func::CaptureMechanism::CaptureMechanism() {
 	wxScreenDC dcScreen;
 	dcScreen.GetSize(&n_displayWidth, &n_displayHeight);
+	
+	m_bitmap_Buffer.Create(n_displayWidth, n_displayHeight, -1);
+
+	str_defaultDir = getenv("USERPROFILE");
+	str_defaultDir += "\\Documents\\Screenshots";
 	return;
 }
 
+
 void Func::CaptureMechanism::CapturingAllScreen() {
-	Capturing(DEFAULT_DELAY);
-	Save("AAAAAA");
+	GrabbingScreenshot(DEFAULT_DELAY);
+	Crop(0, 0, n_displayWidth, n_displayHeight);
 }
 
 
 void Func::CaptureMechanism::CapturingArea() {
-
+	GrabbingScreenshot(DEFAULT_DELAY);
 }
 
 void Func::CaptureMechanism::CapturingActive() {
-
+	GrabbingScreenshot(DEFAULT_DELAY);
 }
 
-void Func::CaptureMechanism::Capturing(int delay) {
+void Func::CaptureMechanism::GrabbingScreenshot(int delay) {
 #ifdef __WXMAC__
 
 #else
 	if (delay) Delay(delay);
-	free(m_bitmap_Buffer);
-	m_bitmap_Buffer = new wxBitmap();
-	m_bitmap_Buffer->Create(n_displayWidth, n_displayWidth);
-
+	
 	// Create a DC for the whole screen area
 	wxScreenDC dcScreen;
 	dcScreen.GetSize(&n_displayWidth, &n_displayHeight);
-	m_bitmap_Buffer = new wxBitmap (n_displayWidth, n_displayHeight, -1);
 	// Create a memory DC that will be used for actually taking the screenshot
 	wxMemoryDC memDC;
-	memDC.SelectObject(*m_bitmap_Buffer);
+	memDC.SelectObject(m_bitmap_Buffer);
 	memDC.Clear();
 
 	// Blit the actual screen on the memory DC
@@ -62,11 +64,9 @@ void Func::CaptureMechanism::Capturing(int delay) {
 #endif __WXMAC__
 }
 
-void Func::CaptureMechanism::Cropping(int x, int y, int width, int height) {
-	wxBitmap m_tmpBitmap = m_bitmap_Buffer->GetSubBitmap(wxRect(wxPoint(x, y), wxSize(width, height)));
-	free(m_bitmap_Buffer);
-	m_bitmap_Buffer = &m_tmpBitmap;
-	Save("AAAAAA");
+void Func::CaptureMechanism::Crop(int x, int y, int width, int height) {
+	m_bitmap_Saved = m_bitmap_Buffer.GetSubBitmap(wxRect(wxPoint(x, y), wxSize(width, height)));
+	Save();
 }
 
 void Func::CaptureMechanism::Union() {
@@ -79,12 +79,21 @@ void Func::CaptureMechanism::Delay(int seconds) {
 		wxYieldIfNeeded();
 }
 
-void Func::CaptureMechanism::Save(const wxString& fileName) {
+void Func::CaptureMechanism::Save() {
+	// setup the filename
+	auto t = std::time(nullptr);
+	auto tm = *std::localtime(&t);
+
+	std::ostringstream oss;
+	oss << std::put_time(&tm, "%d-%m-%Y %H-%M-%S");
+
+	const wxString fileName(oss.str());
+
 	// make sure default_dir exists
 	if (!wxDirExists(str_defaultDir))
 		wxMkdir(str_defaultDir);
 
-	wxFileName fullFileName(str_defaultDir, "appear-" + fileName +
+	wxFileName fullFileName(str_defaultDir, "screenshot-" + fileName +
 		"-" + wxPlatformInfo::Get().GetPortIdShortName() + ".png");
 
 	// do not overwrite already existing files with this name
@@ -92,16 +101,12 @@ void Func::CaptureMechanism::Save(const wxString& fileName) {
 		fullFileName.SetName(fullFileName.GetName() + "_");
 
 	// save the screenshot as a PNG
-	m_bitmap_Buffer->SaveFile(fullFileName.GetFullPath(), wxBITMAP_TYPE_PNG);
-	m_bitmap_Buffer->FreeResource(true);
+	m_bitmap_Saved.SaveFile(fullFileName.GetFullPath(), wxBITMAP_TYPE_PNG);
+	m_bitmap_Saved.FreeResource(true);
 }
 
-void Func::CaptureMechanism::InitiatingRegionSelection() {
-	Capturing(DEFAULT_DELAY);
-}
-
-void Func::CaptureMechanism::GrabbingImage() {
-	switch (mode) {
+void Func::CaptureMechanism::Capture() {
+	switch (m_capturingMode) {
 	case Mode::Full:
 		CapturingAllScreen();
 		break;

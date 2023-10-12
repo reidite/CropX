@@ -51,7 +51,8 @@ bool CropX::OnInit() {
     wxRichTextBuffer::AddHandler(new wxRichTextXMLHandler);
 
     mp_frame_MainFrame = new UI::MainFrame();
-    
+
+    mp_frame_MainFrame->SetIcon(wxIcon("IDB_PNG_FULL", 32, 32));
     mp_frame_MainFrame->Show(true);
 
     return true;
@@ -59,3 +60,4 @@ bool CropX::OnInit() {
 
 
 wxIMPLEMENT_APP(CropX);
+

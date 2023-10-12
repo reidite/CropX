@@ -26,9 +26,10 @@
 
 //!< Definition of name and default size for the application main frame 
 #define MAINFRAME_NAME "CropX"
-#define MAINFRAME_WIDTH 300
+#define MAINFRAME_WIDTH 200
 #define MAINFRAME_HEIGHT 100
 
+#define DEFAULT_ACTIVE_DELAY 1500
 namespace UI {
     class MainFrame : public GUIMainFrame
     {
@@ -41,9 +42,9 @@ namespace UI {
 
     protected:
         void MainFrameUIOnClose(wxCloseEvent& event);
-        void m_button_FullOnButtonClick(wxCommandEvent& event);
-        void m_button_AreaOnButtonClick(wxCommandEvent& event);
-        void m_button_ActiveOnButtonClick(wxCommandEvent& event);
+        void m_bpButton_FullOnButtonClick(wxCommandEvent& event);
+        void m_bpButton_AreaOnButtonClick(wxCommandEvent& event);
+        void m_bpButton_ActiveOnButtonClick(wxCommandEvent& event);
     private:
         std::vector<UI::ScreenFrame*> mp_frame_ScreenFrames;
         std::vector<wxStaticBitmap*> m_bitmap_Screens;
@@ -54,7 +55,6 @@ namespace UI {
         std::thread* pthrd_SreenActiveSelector;
 
         void ShowingScreenFrames();
-        void HiddingScreenFrames();
         void InitializingCroppingThread();
         void InitializingActiveThread();
         void GettingCaptureArea();
