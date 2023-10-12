@@ -29,7 +29,7 @@
 #define MAINFRAME_WIDTH 200
 #define MAINFRAME_HEIGHT 100
 
-#define DEFAULT_ACTIVE_DELAY 1500
+#define DEFAULT_ACTIVE_DELAY 2000
 namespace UI {
     class MainFrame : public GUIMainFrame
     {
@@ -47,7 +47,6 @@ namespace UI {
         void m_bpButton_ActiveOnButtonClick(wxCommandEvent& event);
     private:
         std::vector<UI::ScreenFrame*> mp_frame_ScreenFrames;
-        std::vector<wxStaticBitmap*> m_bitmap_Screens;
 
         Custom::SelectPanel* mp_frame_SelectFrame;
 
@@ -55,6 +54,7 @@ namespace UI {
         std::thread* pthrd_SreenActiveSelector;
 
         void ShowingScreenFrames();
+        void ResetingSelectFrameProperties();
         void InitializingCroppingThread();
         void InitializingActiveThread();
         void GettingCaptureArea();

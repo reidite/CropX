@@ -73,9 +73,9 @@ void Func::CaptureMechanism::Union() {
 
 }
 
-void Func::CaptureMechanism::Delay(int seconds) {
+void Func::CaptureMechanism::Delay(int miliseconds) {
 	clock_t start = clock();
-	while (clock() - start < (clock_t)CLOCKS_PER_SEC * seconds)
+	while (clock() - start < (clock_t) miliseconds)
 		wxYieldIfNeeded();
 }
 

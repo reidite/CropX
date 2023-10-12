@@ -22,6 +22,7 @@
 #include <wx/button.h>
 #include <wx/sizer.h>
 #include <wx/frame.h>
+#include <wx/statbmp.h>
 
 ///////////////////////////////////////////////////////////////////////////
 
@@ -47,7 +48,7 @@ class GUIMainFrame : public wxFrame
 	
 	public:
 		
-		GUIMainFrame( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxEmptyString, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 200,100 ), long style = wxDEFAULT_FRAME_STYLE|wxSUNKEN_BORDER );
+		GUIMainFrame( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxEmptyString, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 200,100 ), long style = wxDEFAULT_FRAME_STYLE|wxSTAY_ON_TOP|wxSUNKEN_BORDER );
 		
 		~GUIMainFrame();
 	
@@ -68,7 +69,7 @@ class GUISelectFrame : public wxFrame
 	
 	public:
 		
-		GUISelectFrame( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxEmptyString, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 500,300 ), long style = wxFRAME_NO_TASKBAR|wxFRAME_SHAPED|wxRESIZE_BORDER|wxSTAY_ON_TOP|wxTRANSPARENT_WINDOW );
+		GUISelectFrame( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxEmptyString, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 500,300 ), long style = wxFRAME_NO_TASKBAR|wxTRANSPARENT_WINDOW );
 		
 		~GUISelectFrame();
 	
@@ -85,8 +86,9 @@ class GUIScreenFrame : public wxFrame
 	
 	public:
 		wxGridSizer* gSizer_Screen;
+		wxStaticBitmap* m_bitmap_Screen;
 		
-		GUIScreenFrame( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxEmptyString, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 500,300 ), long style = wxFRAME_NO_TASKBAR|wxMAXIMIZE_BOX|wxNO_BORDER );
+		GUIScreenFrame( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxEmptyString, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 500,300 ), long style = wxFRAME_NO_TASKBAR|wxMAXIMIZE_BOX|wxNO_BORDER|wxTRANSPARENT_WINDOW );
 		
 		~GUIScreenFrame();
 	

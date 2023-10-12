@@ -31,7 +31,7 @@
 #include "wx/gdicmn.h"
 
 //!< Definition of default delay time for the capturing process 
-#define DEFAULT_DELAY 1
+#define DEFAULT_DELAY 600
 
 namespace Func {
     enum Format {
@@ -73,7 +73,7 @@ namespace Func {
         void GrabbingScreenshot(int delay);
         
         void Union();
-        void Delay(int seconds);
+        void Delay(int miliseconds);
         void Save();
 
     public:

@@ -82,6 +82,9 @@ GUIScreenFrame::GUIScreenFrame( wxWindow* parent, wxWindowID id, const wxString&
 	
 	gSizer_Screen = new wxGridSizer( 1, 1, 0, 0 );
 	
+	m_bitmap_Screen = new wxStaticBitmap( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, 0 );
+	gSizer_Screen->Add( m_bitmap_Screen, 0, wxEXPAND, 5 );
+	
 	
 	this->SetSizer( gSizer_Screen );
 	this->Layout();
