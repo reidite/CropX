@@ -14,7 +14,9 @@
 #include <thread>
 #include <windows.h>
 #include <ole2.h>
+#include <minmax.h>
 #include <uiautomation.h>
+#include <uiautomationclient.h>
 
 namespace Func{
     class Provider
@@ -27,12 +29,13 @@ namespace Func{
 
         Provider();
         IUIAutomationElement* element;
+        IUIAutomationElement* parent;
         HRESULT GetActiveComponent(int x, int y);
 
     private:
         ~Provider();
         
         IUIAutomation* m_automation;
-    
+        IUIAutomationTreeWalker* walker;
     };
 }

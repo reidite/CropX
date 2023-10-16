@@ -69,7 +69,7 @@ class GUISelectFrame : public wxFrame
 	
 	public:
 		
-		GUISelectFrame( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxEmptyString, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 500,300 ), long style = wxFRAME_NO_TASKBAR|wxTRANSPARENT_WINDOW );
+		GUISelectFrame( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxEmptyString, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 500,300 ), long style = wxFRAME_NO_TASKBAR|wxSTAY_ON_TOP|wxTRANSPARENT_WINDOW );
 		
 		~GUISelectFrame();
 	
