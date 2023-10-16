@@ -20,9 +20,9 @@ HRESULT Func::Provider::GetActiveComponent(int x, int y) {
 		height = static_cast<unsigned int>(pData[3]);
 		
 		if (FAILED(walker->GetParentElement(element, &parent)) || !parent) return true;
-		VARIANT parentValue;
-		if (SUCCEEDED(parent->GetCurrentPropertyValue(UIA_BoundingRectanglePropertyId, &parentValue))) {
-			SafeArrayAccessData(parentValue.parray, (void**)&pData);
+
+		if (SUCCEEDED(parent->GetCurrentPropertyValue(UIA_BoundingRectanglePropertyId, &varValue))) {
+			SafeArrayAccessData(varValue.parray, (void**)&pData);
 			if (width > static_cast<unsigned int>(pData[2]) ||
 				height > static_cast<unsigned int>(pData[3])) {
 				n_x = static_cast<unsigned int>(pData[0]);
@@ -32,7 +32,7 @@ HRESULT Func::Provider::GetActiveComponent(int x, int y) {
 			}
 		}
 		element->Release();
-		element = parent;
+		parent->Release();
 
 		return true;
 	}

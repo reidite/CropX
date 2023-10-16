@@ -132,12 +132,14 @@ void UI::MainFrame::InitializingActiveThread() {
     pthrd_SreenActiveSelector = new std::thread([&]() {
         while (!(mp_frame_SelectFrame->atomic_b_croppingScreenIsRaised)) {
             wxPoint cursorPos = wxGetMousePosition();
+            mp_frame_SelectFrame->Show(false);
             if (SUCCEEDED(m_provider->GetActiveComponent(cursorPos.x, cursorPos.y))) {
                 mp_frame_SelectFrame->SetPosition(wxPoint(m_provider->n_x, 
                                                             m_provider->n_y));
                 mp_frame_SelectFrame->SetSize(wxSize(m_provider->width, 
                                                         m_provider->height));
             }
+            mp_frame_SelectFrame->Show(true);
             Sleep(DEFAULT_ACTIVE_DELAY);
         }
         GettingCaptureArea();
