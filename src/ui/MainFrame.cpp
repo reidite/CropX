@@ -54,8 +54,8 @@ void UI::MainFrame::m_bpButton_ActiveOnButtonClick(wxCommandEvent& event)
 }
 
 void UI::MainFrame::SettingSelectPanelFullScreen() {
-    m_frame_SelectFrame->SetPosition(wxPoint(0, 0));
-    m_frame_SelectFrame->SetSize(m_captor->size_fullExtendedLogicalDisplay);
+    m_frame_SelectFrame->SetPosition(m_captor->pts_mostUpperLeftPosition);
+    m_frame_SelectFrame->SetSize(m_captor->size_fullExtendedPhysicalDisplay);
 }
 
 void UI::MainFrame::ResetingSelectPanelProperties() {

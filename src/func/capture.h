@@ -87,7 +87,7 @@ namespace Func {
     public:
         wxBitmap* bitmap_Saved;
 
-        wxSize size_fullExtendedLogicalDisplay;
+        wxPoint pts_mostUpperLeftPosition;
         wxSize size_fullExtendedPhysicalDisplay;
         
 
