@@ -73,26 +73,23 @@ namespace Func {
     {
     private:
         wxString str_defaultDir;
+        wxString str_prefix;
+        void CapturingAllScreen(wxRect geomegy);
+        void CapturingArea(wxRect geomegy);
+        void CapturingActive(wxRect geomegy);
 
-        void CapturingAllScreen(wxWindow* selectFrame);
-        void CapturingArea(wxWindow* selectFrame);
-        void CapturingActive(wxWindow* selectFrame);
-
-        void GrabbingScreenshot(int delay);
-        void GrabbingScreenshotWithDPI(int delay);
+        void GrabbingScreenshot(wxRect geomegy, int delay);
 
         void Union();
         void Delay(int miliseconds);
         void Save();
 
     public:
-        wxBitmap bitmap_Buffer;
-        wxBitmap bitmap_Display;
-        wxBitmap bitmap_Saved;
+        wxBitmap* bitmap_Saved;
 
         wxSize size_fullExtendedLogicalDisplay;
         wxSize size_fullExtendedPhysicalDisplay;
-        std::pair<double, double> pair_scaleFactors;
+        
 
         Mode mode_captureType = Mode::None;
 
@@ -101,10 +98,6 @@ namespace Func {
         CaptureMechanism();
 
         ~CaptureMechanism() { }
-
-        
-
-        void Crop(wxRect geomegy);
         
         void Capture(wxWindow* selectFrame);
 

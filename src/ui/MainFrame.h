@@ -64,8 +64,6 @@ namespace UI {
         void m_bpButton_AreaOnButtonClick(wxCommandEvent& event);
         void m_bpButton_ActiveOnButtonClick(wxCommandEvent& event);
     private:
-        UI::ScreenFrame* m_frame_ScreenFrame;
-
         Custom::SelectPanel* m_frame_SelectFrame;
 
         std::thread* pthrd_SreenCropper;

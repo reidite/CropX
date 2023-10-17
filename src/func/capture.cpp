@@ -47,42 +47,29 @@ Func::CaptureMechanism::CaptureMechanism() {
 
 	}
 
-	bitmap_Display.Create(size_fullExtendedLogicalDisplay.x,
-		size_fullExtendedLogicalDisplay.y,
-		wxBITMAP_SCREEN_DEPTH);
-
-	bitmap_Buffer.Create(size_fullExtendedPhysicalDisplay.x,
-		size_fullExtendedPhysicalDisplay.y,
-		wxBITMAP_SCREEN_DEPTH);
-
-	pair_scaleFactors = {
-		static_cast<double>(size_fullExtendedPhysicalDisplay.x) / 
-									size_fullExtendedLogicalDisplay.x,
-		static_cast<double>(size_fullExtendedPhysicalDisplay.y) / 
-									size_fullExtendedLogicalDisplay.y
-	};
-
 	str_defaultDir = getenv("USERPROFILE");
 	str_defaultDir += "\\Documents\\Screenshots";
 	return;
 }
 
 
-void Func::CaptureMechanism::CapturingAllScreen(wxWindow* selectFrame) {
-	GrabbingScreenshot(DEFAULT_DELAY);
-	Crop(selectFrame->GetScreenRect());
+void Func::CaptureMechanism::CapturingAllScreen(wxRect geomegy) {
+	str_prefix = "-screenshot-Full";
+	GrabbingScreenshot(geomegy, DEFAULT_DELAY);
 }
 
 
-void Func::CaptureMechanism::CapturingArea(wxWindow* selectFrame) {
-	GrabbingScreenshotWithDPI(DEFAULT_DELAY);
+void Func::CaptureMechanism::CapturingArea(wxRect geomegy) {
+	str_prefix = "-screenshot-Area";
+	GrabbingScreenshot(geomegy, DEFAULT_DELAY);
 }
 
-void Func::CaptureMechanism::CapturingActive(wxWindow* selectFrame) {
-	GrabbingScreenshot(DEFAULT_DELAY);
+void Func::CaptureMechanism::CapturingActive(wxRect geomegy) {
+	str_prefix = "-screenshot-Active";
+	GrabbingScreenshot(geomegy, DEFAULT_DELAY);
 }
 
-void Func::CaptureMechanism::GrabbingScreenshot(int delay) {
+void Func::CaptureMechanism::GrabbingScreenshot(wxRect geomegy, int delay) {
 #ifdef _WIN32
 	//windows code goes here
 	if (delay) Delay(delay);
@@ -91,63 +78,22 @@ void Func::CaptureMechanism::GrabbingScreenshot(int delay) {
 	wxScreenDC dcScreen;
 	// Create a memory DC that will be used for actually taking the screenshot
 	wxMemoryDC dcCapture;
-	dcCapture.SelectObject(bitmap_Buffer);
+	bitmap_Saved = new wxBitmap(
+		geomegy.width, 
+		geomegy.height,
+		wxBITMAP_SCREEN_DEPTH
+	);
+	dcCapture.SelectObject(*bitmap_Saved);
 	dcCapture.Clear();
 
 	// Blit the actual screen on the memory DC
 	dcCapture.Blit(0, // Copy to this X coordinate
 		0, // Copy to this Y coordinate
-		size_fullExtendedPhysicalDisplay.x, // Copy this width
-		size_fullExtendedPhysicalDisplay.y, // Copy this height
+		geomegy.width, // Copy this width
+		geomegy.height, // Copy this height
 		&dcScreen, // From where do we copy?
-		0, // What's the X offset in the original DC?
-		0  // What's the Y offset in the original DC?
-	);
-
-	//// Select the Bitmap out of the memory DC
-	dcCapture.SelectObject(wxNullBitmap);
-#elif __linux__
-	//linux  code goes here
-
-#elif __WXMAC__
-	//mac code goes here
-
-#else
-
-#endif
-
-}
-
-void Func::CaptureMechanism::GrabbingScreenshotWithDPI(int delay) {
-#ifdef _WIN32
-	//windows code goes here
-	if (delay) Delay(delay);
-
-	// Create a DC for the whole screen area
-	wxScreenDC dcScreen;
-	// Create a memory DC that will be used for actually taking the screenshot
-	wxMemoryDC dcCapture;
-	dcCapture.SelectObject(bitmap_Buffer);
-	dcCapture.Clear();
-
-	// Blit the actual screen on the memory DC
-	dcCapture.Blit(0, // Copy to this X coordinate
-		0, // Copy to this Y coordinate
-		size_fullExtendedPhysicalDisplay.x, // Copy this width
-		size_fullExtendedPhysicalDisplay.y, // Copy this height
-		&dcScreen, // From where do we copy?
-		0, // What's the X offset in the original DC?
-		0  // What's the Y offset in the original DC?
-	);
-
-	// Create a memory DC for taking the scaled displaying image
-	dcCapture.SelectObject(bitmap_Display);
-	dcCapture.StretchBlit(
-		wxPoint(0, 0),
-		size_fullExtendedLogicalDisplay,
-		&dcScreen,
-		wxPoint(0, 0),
-		size_fullExtendedPhysicalDisplay
+		geomegy.x, // What's the X offset in the original DC?
+		geomegy.y  // What's the Y offset in the original DC?
 	);
 
 	//// Select the Bitmap out of the memory DC
@@ -189,7 +135,7 @@ void Func::CaptureMechanism::Save() {
 	if (!wxDirExists(str_defaultDir))
 		wxMkdir(str_defaultDir);
 
-	wxFileName fullFileName(str_defaultDir, "screenshot-" + fileName +
+	wxFileName fullFileName(str_defaultDir,  fileName + str_prefix +
 		"-" + wxPlatformInfo::Get().GetPortIdShortName() + ".png");
 
 	// do not overwrite already existing files with this name
@@ -197,34 +143,40 @@ void Func::CaptureMechanism::Save() {
 		fullFileName.SetName(fullFileName.GetName() + "_");
 
 	// save the screenshot as a PNG
-	bitmap_Saved.SaveFile(fullFileName.GetFullPath(), wxBITMAP_TYPE_PNG);
-	bitmap_Saved.FreeResource(true);
-}
-
-void Func::CaptureMechanism::Crop(wxRect geo) {
-	wxRect physical_geo = wxRect(
-		geo.x * pair_scaleFactors.first,
-		geo.y * pair_scaleFactors.second,
-		geo.width * pair_scaleFactors.first,
-		geo.height * pair_scaleFactors.second
-	);
-	bitmap_Saved = bitmap_Buffer.GetSubBitmap(physical_geo);
-	Save();
+	bitmap_Saved->SaveFile(fullFileName.GetFullPath(), wxBITMAP_TYPE_PNG);
+	delete bitmap_Saved;
 }
 
 void Func::CaptureMechanism::Capture(wxWindow* selectFrame) {
+	int displayIDx = wxDisplay::GetFromWindow(selectFrame);
+	std::pair<double, double> pair_scaleFactors = {
+		static_cast<double>(infos_displayHandlers[displayIDx].physicalResolution.x) /
+				infos_displayHandlers[displayIDx].logicalResolution.x,
+		static_cast<double>(infos_displayHandlers[displayIDx].physicalResolution.y) /
+				infos_displayHandlers[displayIDx].logicalResolution.y
+	};
+	wxRect geo = selectFrame->GetScreenRect();
+	wxRect physical_geo = wxRect(
+		(geo.x - infos_displayHandlers[displayIDx].position.x) * pair_scaleFactors.first
+			+ infos_displayHandlers[displayIDx].position.x,
+		(geo.y - infos_displayHandlers[displayIDx].position.y) * pair_scaleFactors.second
+			+ infos_displayHandlers[displayIDx].position.y,
+		geo.width * pair_scaleFactors.first,
+		geo.height * pair_scaleFactors.second
+	);
 	switch (mode_captureType) {
 	case Mode::Full:
-		CapturingAllScreen(selectFrame);
+		CapturingAllScreen(physical_geo);
 		break;
 	case Mode::Area:
-		CapturingArea(selectFrame);
+		CapturingArea(physical_geo);
 		break;
 	case Mode::Active:
-		CapturingActive(selectFrame);
+		CapturingActive(physical_geo);
 		break;
 	default:
 		break;
 	}
+	Save();
 	mode_captureType = Mode::None;
 }
