@@ -10,12 +10,14 @@
 // Licence:         GPL-3.0 license
 /////////////////////////////////////////////////////////////////////////////
 #pragma once
+#include "wx/window.h"
 #include "wx/bitmap.h"
+#include "wx/display.h"
 #include "wx/filename.h"
-#include "wx/notebook.h"
 #include "wx/dcscreen.h"
 #include "wx/dcmemory.h"
 #include "wx/string.h"
+#include <wx/dcgraph.h>
 
 #include <string>
 #include <vector>
@@ -61,36 +63,50 @@ namespace Func {
         Cancel = 2
     };
 
+    struct DISPLAYINFO {
+        wxPoint position;
+        wxSize logicalResolution;
+        wxSize physicalResolution;
+    };
+
     class CaptureMechanism
     {
     private:
         wxString str_defaultDir;
 
-        void CapturingAllScreen();
-        void CapturingArea();
-        void CapturingActive();
+        void CapturingAllScreen(wxWindow* selectFrame);
+        void CapturingArea(wxWindow* selectFrame);
+        void CapturingActive(wxWindow* selectFrame);
 
         void GrabbingScreenshot(int delay);
-        
+        void GrabbingScreenshotWithDPI(int delay);
+
         void Union();
         void Delay(int miliseconds);
         void Save();
 
     public:
-        wxBitmap m_bitmap_Buffer;
-        wxBitmap m_bitmap_Saved;
-        
-        unsigned int dpiX;
-        unsigned int dpiY;
+        wxBitmap bitmap_Buffer;
+        wxBitmap bitmap_Display;
+        wxBitmap bitmap_Saved;
+
+        wxSize size_fullExtendedLogicalDisplay;
+        wxSize size_fullExtendedPhysicalDisplay;
+        std::pair<double, double> pair_scaleFactors;
+
+        Mode mode_captureType = Mode::None;
+
+        std::vector<DISPLAYINFO> infos_displayHandlers;
 
         CaptureMechanism();
 
         ~CaptureMechanism() { }
 
-        wxCoord n_displayWidth, n_displayHeight;
-        void Crop(int x, int y, int width, int height);
         
-        Mode m_capturingMode = Mode::None;
-        void Capture();
+
+        void Crop(wxRect geomegy);
+        
+        void Capture(wxWindow* selectFrame);
+
     };
 }

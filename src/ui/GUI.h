@@ -88,7 +88,7 @@ class GUIScreenFrame : public wxFrame
 		wxGridSizer* gSizer_Screen;
 		wxStaticBitmap* m_bitmap_Screen;
 		
-		GUIScreenFrame( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxEmptyString, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 500,300 ), long style = wxFRAME_NO_TASKBAR|wxMAXIMIZE_BOX|wxNO_BORDER|wxTRANSPARENT_WINDOW );
+		GUIScreenFrame( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxEmptyString, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 500,300 ), long style = wxFRAME_NO_TASKBAR|wxCLIP_CHILDREN|wxNO_BORDER );
 		
 		~GUIScreenFrame();
 	

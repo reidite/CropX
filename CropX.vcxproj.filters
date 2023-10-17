@@ -36,7 +36,7 @@
     <ClCompile Include="src\func\capture.cpp">
       <Filter>Source Files\func</Filter>
     </ClCompile>
-    <ClCompile Include="src\ui\ScreenPanel.cpp">
+    <ClCompile Include="src\ui\ScreenFrame.cpp">
       <Filter>Source Files\ui</Filter>
     </ClCompile>
     <ClCompile Include="src\ui\SelectPanel.cpp">
@@ -59,7 +59,7 @@
     <ClInclude Include="src\func\capture.h">
       <Filter>Source Files\func</Filter>
     </ClInclude>
-    <ClInclude Include="src\ui\ScreenPanel.h">
+    <ClInclude Include="src\ui\ScreenFrame.h">
       <Filter>Source Files\ui</Filter>
     </ClInclude>
     <ClInclude Include="src\ui\SelectPanel.h">

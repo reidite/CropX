@@ -15,7 +15,7 @@
 #include <wx/statbmp.h>
 
 #include "GUI.h"
-#include "ScreenPanel.h"
+#include "ScreenFrame.h"
 #include "SelectPanel.h"
 #include "../func/capture.h"
 #include "../func/provider.h"
@@ -64,16 +64,16 @@ namespace UI {
         void m_bpButton_AreaOnButtonClick(wxCommandEvent& event);
         void m_bpButton_ActiveOnButtonClick(wxCommandEvent& event);
     private:
-        std::vector<UI::ScreenFrame*> mp_frame_ScreenFrames;
+        UI::ScreenFrame* m_frame_ScreenFrame;
 
-        Custom::SelectPanel* mp_frame_SelectFrame;
+        Custom::SelectPanel* m_frame_SelectFrame;
 
         std::thread* pthrd_SreenCropper;
         std::thread* pthrd_SreenActiveSelector;
 
-        void GettingDPIScreenFrames();
-        void ShowingScreenFrames();
-        void ResetingSelectFrameProperties();
+        void ShowingScreenFrame();
+        void SettingSelectPanelFullScreen();
+        void ResetingSelectPanelProperties();
         void InitializingCroppingThread();
         void InitializingActiveThread();
         void GettingCaptureArea();
