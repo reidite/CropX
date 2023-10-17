@@ -52,6 +52,7 @@ bool CropX::OnInit() {
 
     mp_frame_MainFrame = new UI::MainFrame();
 
+    mp_frame_MainFrame->SetSize(wxSize(MAINFRAME_WIDTH, MAINFRAME_HEIGHT));
     mp_frame_MainFrame->SetIcon(wxIcon("IDB_PNG_FULL", 32, 32));
     mp_frame_MainFrame->Show(true);
 

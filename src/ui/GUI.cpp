@@ -11,25 +11,25 @@
 
 GUIMainFrame::GUIMainFrame( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : wxFrame( parent, id, title, pos, size, style )
 {
-	this->SetSizeHints( wxSize( 200,100 ), wxDefaultSize );
+	this->SetSizeHints( wxSize( 300,100 ), wxDefaultSize );
 	this->SetForegroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_WINDOW ) );
 	this->SetBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_WINDOW ) );
 	
 	wxGridSizer* gSizer5;
 	gSizer5 = new wxGridSizer( 1, 3, 0, 0 );
 	
-	m_bpButton_Full = new wxBitmapButton( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
-	m_bpButton_Full->SetMinSize( wxSize( 30,30 ) );
+	m_bpButton_Full = new wxBitmapButton( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( 50,50 ), wxBU_AUTODRAW );
+	m_bpButton_Full->SetMinSize( wxSize( 50,50 ) );
 	
 	gSizer5->Add( m_bpButton_Full, 0, wxEXPAND, 5 );
 	
-	m_bpButton_Area = new wxBitmapButton( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
-	m_bpButton_Area->SetMinSize( wxSize( 30,30 ) );
+	m_bpButton_Area = new wxBitmapButton( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( 50,50 ), wxBU_AUTODRAW );
+	m_bpButton_Area->SetMinSize( wxSize( 50,50 ) );
 	
 	gSizer5->Add( m_bpButton_Area, 0, wxEXPAND, 5 );
 	
-	m_bpButton_Active = new wxBitmapButton( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
-	m_bpButton_Active->SetMinSize( wxSize( 30,30 ) );
+	m_bpButton_Active = new wxBitmapButton( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( 50,50 ), wxBU_AUTODRAW );
+	m_bpButton_Active->SetMinSize( wxSize( 50,50 ) );
 	
 	gSizer5->Add( m_bpButton_Active, 0, wxEXPAND, 5 );
 	

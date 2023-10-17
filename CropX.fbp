@@ -8,7 +8,7 @@
         <property name="disconnect_mode">source_name</property>
         <property name="disconnect_php_events">0</property>
         <property name="disconnect_python_events">0</property>
-        <property name="embedded_files_path">res</property>
+        <property name="embedded_files_path"></property>
         <property name="encoding">UTF-8</property>
         <property name="event_generation">connect</property>
         <property name="file">GUI</property>
@@ -41,10 +41,10 @@
             <property name="hidden">0</property>
             <property name="id">wxID_ANY</property>
             <property name="maximum_size"></property>
-            <property name="minimum_size">200,100</property>
+            <property name="minimum_size">300,100</property>
             <property name="name">GUIMainFrame</property>
             <property name="pos"></property>
-            <property name="size">200,100</property>
+            <property name="size">300,100</property>
             <property name="style">wxDEFAULT_FRAME_STYLE|wxSTAY_ON_TOP</property>
             <property name="subclass"></property>
             <property name="title"></property>
@@ -139,7 +139,7 @@
                         <property name="maximum_size"></property>
                         <property name="min_size"></property>
                         <property name="minimize_button">0</property>
-                        <property name="minimum_size">30,30</property>
+                        <property name="minimum_size">50,50</property>
                         <property name="moveable">1</property>
                         <property name="name">m_bpButton_Full</property>
                         <property name="pane_border">1</property>
@@ -151,7 +151,7 @@
                         <property name="resize">Resizable</property>
                         <property name="selected"></property>
                         <property name="show">1</property>
-                        <property name="size"></property>
+                        <property name="size">50,50</property>
                         <property name="style">wxBU_AUTODRAW</property>
                         <property name="subclass"></property>
                         <property name="toolbar_pane">0</property>
@@ -232,7 +232,7 @@
                         <property name="maximum_size"></property>
                         <property name="min_size"></property>
                         <property name="minimize_button">0</property>
-                        <property name="minimum_size">30,30</property>
+                        <property name="minimum_size">50,50</property>
                         <property name="moveable">1</property>
                         <property name="name">m_bpButton_Area</property>
                         <property name="pane_border">1</property>
@@ -244,7 +244,7 @@
                         <property name="resize">Resizable</property>
                         <property name="selected"></property>
                         <property name="show">1</property>
-                        <property name="size"></property>
+                        <property name="size">50,50</property>
                         <property name="style">wxBU_AUTODRAW</property>
                         <property name="subclass"></property>
                         <property name="toolbar_pane">0</property>
@@ -325,7 +325,7 @@
                         <property name="maximum_size"></property>
                         <property name="min_size"></property>
                         <property name="minimize_button">0</property>
-                        <property name="minimum_size">30,30</property>
+                        <property name="minimum_size">50,50</property>
                         <property name="moveable">1</property>
                         <property name="name">m_bpButton_Active</property>
                         <property name="pane_border">1</property>
@@ -337,7 +337,7 @@
                         <property name="resize">Resizable</property>
                         <property name="selected"></property>
                         <property name="show">1</property>
-                        <property name="size"></property>
+                        <property name="size">50,50</property>
                         <property name="style">wxBU_AUTODRAW</property>
                         <property name="subclass"></property>
                         <property name="toolbar_pane">0</property>

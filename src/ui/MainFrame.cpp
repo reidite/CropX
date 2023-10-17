@@ -10,9 +10,11 @@
 UI::MainFrame::MainFrame()
     : GUIMainFrame(nullptr, wxID_ANY, MAINFRAME_NAME, wxDefaultPosition, wxSize(MAINFRAME_WIDTH, MAINFRAME_HEIGHT))
 {
+    m_bpButton_Full->SetBitmap(wxBitmapBundle(wxBitmap(wxT("src/res/full.big.png"), wxBITMAP_TYPE_ANY)));
+    m_bpButton_Area->SetBitmap(wxBitmapBundle(wxBitmap(wxT("src/res/area.big.png"), wxBITMAP_TYPE_ANY)));
+    m_bpButton_Active->SetBitmap(wxBitmapBundle(wxBitmap(wxT("src/res/active.big.png"), wxBITMAP_TYPE_ANY)));
     m_captor = new Func::CaptureMechanism();
     m_provider = new Func::Provider();
-
     m_frame_SelectFrame = new Custom::SelectPanel();
 
     // Set minimum size hints

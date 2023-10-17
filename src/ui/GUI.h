@@ -48,7 +48,7 @@ class GUIMainFrame : public wxFrame
 	
 	public:
 		
-		GUIMainFrame( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxEmptyString, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 200,100 ), long style = wxDEFAULT_FRAME_STYLE|wxSTAY_ON_TOP|wxSUNKEN_BORDER );
+		GUIMainFrame( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxEmptyString, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 300,100 ), long style = wxDEFAULT_FRAME_STYLE|wxSTAY_ON_TOP|wxSUNKEN_BORDER );
 		
 		~GUIMainFrame();
 	

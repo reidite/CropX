@@ -5,7 +5,7 @@
 // Maintainer:      Vincent Nguyen
 // Contributors:    N/A
 // Created:         09/10/2023
-// Last edit:       09/10/2023
+// Last edit:       17/10/2023
 // Copyright:       Anyone
 // Licence:         GPL-3.0 license
 /////////////////////////////////////////////////////////////////////////////
@@ -44,7 +44,7 @@
 
 //!< Definition of name and default size for the application main frame 
 #define MAINFRAME_NAME "CropX"
-#define MAINFRAME_WIDTH 200
+#define MAINFRAME_WIDTH 225
 #define MAINFRAME_HEIGHT 100
 
 #define DEFAULT_ACTIVE_DELAY 2000
