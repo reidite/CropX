@@ -2,6 +2,7 @@
 
 UI::Custom::SelectPanel::SelectPanel()
 	: GUISelectFrame(nullptr, wxID_ANY, wxString(""), wxDefaultPosition, wxDefaultSize, BORDERLESS_FRAME_STYLE) {
+    SetTransparent(100);
 	// Set up the UI.
 	m_bgPanel = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxDefaultSize,
 		wxTAB_TRAVERSAL | wxFULL_REPAINT_ON_RESIZE);
