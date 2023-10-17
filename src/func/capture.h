@@ -35,6 +35,7 @@
 //!< Definition of default delay time for the capturing process 
 #define DEFAULT_DELAY 600
 
+#define DEFAULT_DISPLAY_EPS 10
 namespace Func {
     enum Format {
         PNG = 0,

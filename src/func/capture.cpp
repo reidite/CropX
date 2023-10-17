@@ -28,7 +28,7 @@ Func::CaptureMechanism::CaptureMechanism() {
 				display.GetCurrentMode().GetHeight()})
 		});
 		if (i != primaryIndex) {
-			if (screen.x < pts_mostUpperLeftPosition.x) {
+			if (screen.x < pts_mostUpperLeftPosition.x - DEFAULT_DISPLAY_EPS) {
 				pts_mostUpperLeftPosition.x = screen.x;
 				size_fullExtendedPhysicalDisplay.x +=
 					display.GetCurrentMode().GetWidth();
@@ -38,7 +38,7 @@ Func::CaptureMechanism::CaptureMechanism() {
 				size_fullExtendedPhysicalDisplay.x += 
 					display.GetCurrentMode().GetWidth();
 			}
-			if (screen.y < pts_mostUpperLeftPosition.y) {
+			if (screen.y < pts_mostUpperLeftPosition.y - DEFAULT_DISPLAY_EPS) {
 				pts_mostUpperLeftPosition.y = screen.y;
 				size_fullExtendedPhysicalDisplay.y +=
 					display.GetCurrentMode().GetHeight();
