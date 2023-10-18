@@ -14,10 +14,11 @@ Func::CaptureMechanism::CaptureMechanism() {
 	int primaryIndex = wxDisplay::GetFromPoint(wxPoint(0, 0));
 	wxDisplay primaryDisplay(primaryIndex);
 	pts_mostUpperLeftPosition = { 0, 0 };
-	size_fullExtendedPhysicalDisplay = { 
+	wxPoint pts_mostLowerRightPosition = {
 		primaryDisplay.GetCurrentMode().GetWidth(),
 		primaryDisplay.GetCurrentMode().GetHeight()
 	};
+	
 
 	// Get the other display properties
 	for (int i = 0; i < wxDisplay::GetCount(); i++) {
@@ -30,43 +31,20 @@ Func::CaptureMechanism::CaptureMechanism() {
 				display.GetCurrentMode().GetHeight()})
 		});
 		if (i == primaryIndex) continue;
-		
-		// Get the other display orientation
-		if (abs(pts_mostUpperLeftPosition.x - screen.x) >= DISPLAY_UPDATE_EPS) {
-			if (abs(pts_mostUpperLeftPosition.x - screen.x) <=
-				display.GetCurrentMode().GetWidth() - DISPLAY_UPDATE_EPS)
-				size_fullExtendedPhysicalDisplay.x +=
-				abs(pts_mostUpperLeftPosition.x - screen.x);
-			else
-				size_fullExtendedPhysicalDisplay.x +=
-				display.GetCurrentMode().GetWidth();
-			if (pts_mostUpperLeftPosition.x - screen.x >= DISPLAY_UPDATE_EPS)
-				pts_mostUpperLeftPosition.x = screen.x;
-		}
-		else if (screen.x >= pts_mostUpperLeftPosition.x +
-			size_fullExtendedPhysicalDisplay.x) {
-			size_fullExtendedPhysicalDisplay.x +=
-				display.GetCurrentMode().GetWidth();
-		}
-		if (abs(pts_mostUpperLeftPosition.y - screen.y) >= DISPLAY_UPDATE_EPS) {
-			if (abs(pts_mostUpperLeftPosition.y - screen.y) <=
-				display.GetCurrentMode().GetHeight() - DISPLAY_UPDATE_EPS)
-				size_fullExtendedPhysicalDisplay.y +=
-				abs(pts_mostUpperLeftPosition.y - screen.y);
-			else
-				size_fullExtendedPhysicalDisplay.y +=
-				display.GetCurrentMode().GetHeight();
+		// Get the full physical resolution
+		pts_mostUpperLeftPosition.x = std::min(pts_mostUpperLeftPosition.x, screen.x);
+		pts_mostUpperLeftPosition.y = std::min(pts_mostUpperLeftPosition.y, screen.y);
 
-			if (pts_mostUpperLeftPosition.y - screen.y >= DISPLAY_UPDATE_EPS)
-				pts_mostUpperLeftPosition.y = screen.y;
-		}
-
-		if (screen.width > size_fullExtendedPhysicalDisplay.x)
-			size_fullExtendedPhysicalDisplay.x = screen.width;
-
-		if (screen.height > size_fullExtendedPhysicalDisplay.y)
-			size_fullExtendedPhysicalDisplay.y = screen.height;
+		pts_mostLowerRightPosition.x = std::max(pts_mostLowerRightPosition.x, 
+										screen.x + display.GetCurrentMode().GetWidth());
+		pts_mostLowerRightPosition.y = std::max(pts_mostLowerRightPosition.y,
+										screen.y + display.GetCurrentMode().GetHeight());
 	}
+
+	size_fullExtendedPhysicalDisplay = {
+		pts_mostLowerRightPosition.x - pts_mostUpperLeftPosition.x,
+		pts_mostLowerRightPosition.y - pts_mostUpperLeftPosition.y
+	};
 
 	str_defaultDir = getenv("USERPROFILE");
 	str_defaultDir += "\\Documents\\Screenshots";

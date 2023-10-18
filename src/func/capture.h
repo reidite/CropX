@@ -17,9 +17,6 @@
 
 //!< Definition of default delay time for the capturing process 
 #define DEFAULT_DELAY 600
-//!< Definition of the minimum pixel different value that require 
-//!  updating display
-#define DISPLAY_UPDATE_EPS 5
 
 #include "wx/window.h"
 #include "wx/bitmap.h"

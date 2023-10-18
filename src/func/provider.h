@@ -46,7 +46,7 @@ namespace Func{
         IUIAutomationElement* parent;
 
         //!< Data retrieving functionality for the pointed UI element
-        HRESULT GetActiveComponent(int x, int y);
+        HRESULT GetActiveComponent(int cursor_x, int cursor_y);
 
     private:
         ~Provider();

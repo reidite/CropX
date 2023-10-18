@@ -15,8 +15,8 @@ Func::Provider::Provider() {
 // CaptureMechanism - Functions
 // ----------------------------------------------------------------------------
 
-HRESULT Func::Provider::GetActiveComponent(int x, int y) {
-	POINT pt = { x, y };
+HRESULT Func::Provider::GetActiveComponent(int cursor_x, int cursor_y) {
+	POINT pt = { cursor_x, cursor_y };
 	while (FAILED(m_automation->ElementFromPoint(pt, &element)));
 	VARIANT varValue;
 	if (SUCCEEDED(element->GetCurrentPropertyValue(UIA_BoundingRectanglePropertyId, &varValue))) {
