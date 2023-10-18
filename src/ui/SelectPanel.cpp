@@ -73,11 +73,6 @@ void UI::Custom::SelectPanel::OnChar(wxKeyEvent& event) {
     if (event.GetKeyCode() == WXK_ESCAPE) {
         this->Close(true);
     }
-    else if (event.GetKeyCode() == WXK_PRINT ||
-        (GetKeyState(VK_SHIFT) & 0x8000 != 0 && event.GetKeyCode() == WXK_PRINT)) {
-        atomic_b_croppingScreenIsRaised = true;
-        this->Show(false);
-    }
     else {
         event.Skip();
     }
