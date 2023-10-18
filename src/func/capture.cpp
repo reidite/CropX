@@ -55,22 +55,22 @@ Func::CaptureMechanism::CaptureMechanism() {
 // CaptureMechanism - Functions
 // ----------------------------------------------------------------------------
 
-void Func::CaptureMechanism::CapturingAllScreen(wxRect geomegy) {
+void Func::CaptureMechanism::CapturingAllScreen(const wxRect& geomegy) {
 	str_prefix = "-screenshot-Full";
 	GrabbingScreenshot(geomegy, DEFAULT_DELAY);
 }
 
-void Func::CaptureMechanism::CapturingArea(wxRect geomegy) {
+void Func::CaptureMechanism::CapturingArea(const wxRect& geomegy) {
 	str_prefix = "-screenshot-Area";
 	GrabbingScreenshot(geomegy, DEFAULT_DELAY);
 }
 
-void Func::CaptureMechanism::CapturingActive(wxRect geomegy) {
+void Func::CaptureMechanism::CapturingActive(const wxRect& geomegy) {
 	str_prefix = "-screenshot-Active";
 	GrabbingScreenshot(geomegy, DEFAULT_DELAY);
 }
 
-void Func::CaptureMechanism::GrabbingScreenshot(wxRect geomegy, int delay) {
+void Func::CaptureMechanism::GrabbingScreenshot(const wxRect& geomegy, int delay) {
 	// Delaying before image grabbing
 	if (delay) Delay(delay);
 	// Create a DC for the whole screen area

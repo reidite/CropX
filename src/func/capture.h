@@ -90,12 +90,12 @@ namespace Func {
         wxString str_prefix;
 
         //!< Setting up for each mode of screen capturing
-        void CapturingAllScreen(wxRect geomegy);
-        void CapturingArea(wxRect geomegy);
-        void CapturingActive(wxRect geomegy);
+        void CapturingAllScreen(const wxRect& geomegy);
+        void CapturingArea(const wxRect& geomegy);
+        void CapturingActive(const wxRect& geomegy);
 
         //!< Processing grabbing image from screen
-        void GrabbingScreenshot(wxRect geomegy, int delay);
+        void GrabbingScreenshot(const wxRect& geomegy, int delay);
 
         //!< Processing delaying time before grabbing
         void Delay(int miliseconds);

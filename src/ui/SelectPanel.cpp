@@ -28,41 +28,28 @@ UI::Custom::SelectPanel::SelectPanel()
     m_resizeFrequency = 50;
     m_curResizeWindow = NULL;
 
-    // Set window and event handlers for resizing from upper right.
-    m_clickToResizeFromUpperRightWindow = m_bgPanel;
-    m_clickToResizeFromUpperRightWindow->Bind(wxEVT_LEFT_DOWN,
+    // Set event handlers for resizing.
+    m_bgPanel->Bind(wxEVT_LEFT_DOWN,
         &SelectPanel::OnLeftDownForResizeFromUpperRight, this);
-    m_clickToResizeFromUpperRightWindow->Bind(wxEVT_LEFT_UP,
-        &SelectPanel::OnLeftUp, this);
-    m_clickToResizeFromUpperRightWindow->Bind(wxEVT_MOUSE_CAPTURE_LOST,
-        &SelectPanel::OnMouseCaptureLost, this);
-
-    // Set window and event handlers for resizing from upper left.
-    m_clickToResizeFromUpperLeftWindow = m_bgPanel;
-    m_clickToResizeFromUpperLeftWindow->Bind(wxEVT_LEFT_DOWN,
+    m_bgPanel->Bind(wxEVT_LEFT_DOWN,
         &SelectPanel::OnLeftDownForResizeFromUpperLeft, this);
-    m_clickToResizeFromUpperLeftWindow->Bind(wxEVT_LEFT_UP,
-        &SelectPanel::OnLeftUp, this);
-    m_clickToResizeFromUpperLeftWindow->Bind(wxEVT_MOUSE_CAPTURE_LOST,
-        &SelectPanel::OnMouseCaptureLost, this);
-
-    // Set window and event handlers for resizing from lower right.
-    m_clickToResizeFromLowerRightWindow = m_bgPanel;
-    m_clickToResizeFromLowerRightWindow->Bind(wxEVT_LEFT_DOWN,
+    m_bgPanel->Bind(wxEVT_LEFT_DOWN,
         &SelectPanel::OnLeftDownForResizeFromLowerRight, this);
-    m_clickToResizeFromLowerRightWindow->Bind(wxEVT_LEFT_UP,
+    m_bgPanel->Bind(wxEVT_LEFT_DOWN,
+        &SelectPanel::OnLeftDownForResizeFromLowerLeft, this);
+
+    m_bgPanel->Bind(wxEVT_LEFT_UP,
         &SelectPanel::OnLeftUp, this);
-    m_clickToResizeFromLowerRightWindow->Bind(wxEVT_MOUSE_CAPTURE_LOST,
+    m_bgPanel->Bind(wxEVT_MOUSE_CAPTURE_LOST,
         &SelectPanel::OnMouseCaptureLost, this);
 
-    // Set window and event handlers for resizing from lower left.
-    m_clickToResizeFromLowerLeftWindow = m_bgPanel;
-    m_clickToResizeFromLowerLeftWindow->Bind(wxEVT_LEFT_DOWN,
-        &SelectPanel::OnLeftDownForResizeFromLowerLeft, this);
-    m_clickToResizeFromLowerLeftWindow->Bind(wxEVT_LEFT_UP,
-        &SelectPanel::OnLeftUp, this);
-    m_clickToResizeFromLowerLeftWindow->Bind(wxEVT_MOUSE_CAPTURE_LOST,
-        &SelectPanel::OnMouseCaptureLost, this);
+    // Set event handlers for initializing screen capture.
+    m_bgPanel->Bind(wxEVT_LEFT_DOWN,
+        &SelectPanel::OnLeftDownForInitCapturing, this);
+
+    // Set event handlers for keyboard.
+    m_bgPanel->Bind(wxEVT_KEY_DOWN,
+        &SelectPanel::OnChar, this);
 }
 
 UI::Custom::SelectPanel::~SelectPanel() {}
@@ -71,8 +58,33 @@ UI::Custom::SelectPanel::~SelectPanel() {}
 // SelectPanel - Event Handlers
 // --------------------------------------------------------------------------
 
+void UI::Custom::SelectPanel::OnLeftDownForInitCapturing(wxMouseEvent& event) {
+    if (event.ControlDown()) {
+        // Raising the tracking state to init the capturing thread.
+        atomic_b_croppingScreenIsRaised = true;
+        this->Show(false);
+    }
+    else {
+        event.Skip();
+    }
+}
+
+void UI::Custom::SelectPanel::OnChar(wxKeyEvent& event) {
+    if (event.GetKeyCode() == WXK_ESCAPE) {
+        this->Close(true);
+    }
+    else if (event.GetKeyCode() == WXK_PRINT ||
+        (GetKeyState(VK_SHIFT) & 0x8000 != 0 && event.GetKeyCode() == WXK_PRINT)) {
+        atomic_b_croppingScreenIsRaised = true;
+        this->Show(false);
+    }
+    else {
+        event.Skip();
+    }
+}
+
 void UI::Custom::SelectPanel::GUISelectFrameOnClose(wxCloseEvent& event) {
-    // Raising the tracking state to init the capturing thread.
+    atomic_b_croppingScreenIsCanceled = true;
 	atomic_b_croppingScreenIsRaised = true;
 	this->Show(false);
 }
@@ -108,12 +120,12 @@ void UI::Custom::SelectPanel::OnBgPanelPaint(wxPaintEvent&) {
 
 void UI::Custom::SelectPanel::OnLeftDownForResizeFromUpperLeft(wxMouseEvent& event) {
     wxPoint p = event.GetPosition();
-    wxSize sz = m_clickToResizeFromUpperLeftWindow->GetClientSize();
+    wxSize sz = m_bgPanel->GetClientSize();
 
-    // Check if the click is in the lower left of the window.
+    // Check if the click is in the upper left of the window.
     if (p.x < m_resizeAreaLength &&
         p.y < m_resizeAreaLength) {
-        StartResize(m_clickToResizeFromUpperLeftWindow, p);
+        StartResize(m_bgPanel, p);
 
         m_resizeMode = RESIZE_MODE::FromUpperLeft;
 
@@ -125,12 +137,12 @@ void UI::Custom::SelectPanel::OnLeftDownForResizeFromUpperLeft(wxMouseEvent& eve
 
 void UI::Custom::SelectPanel::OnLeftDownForResizeFromUpperRight(wxMouseEvent& event) {
     wxPoint p = event.GetPosition();
-    wxSize sz = m_clickToResizeFromUpperRightWindow->GetClientSize();
+    wxSize sz = m_bgPanel->GetClientSize();
 
-    // Check if the click is in the lower right of the window.
+    // Check if the click is in the upper right of the window.
     if (sz.GetWidth() - p.x < m_resizeAreaLength &&
         p.y < m_resizeAreaLength) {
-        StartResize(m_clickToResizeFromUpperRightWindow, p);
+        StartResize(m_bgPanel, p);
 
         m_resizeMode = RESIZE_MODE::FromUpperRight;
 
@@ -142,12 +154,12 @@ void UI::Custom::SelectPanel::OnLeftDownForResizeFromUpperRight(wxMouseEvent& ev
 
 void UI::Custom::SelectPanel::OnLeftDownForResizeFromLowerLeft(wxMouseEvent& event) {
     wxPoint p = event.GetPosition();
-    wxSize sz = m_clickToResizeFromLowerLeftWindow->GetClientSize();
+    wxSize sz = m_bgPanel->GetClientSize();
 
     // Check if the click is in the lower left of the window.
     if (p.x < m_resizeAreaLength &&
         sz.GetHeight() - p.y < m_resizeAreaLength) {
-        StartResize(m_clickToResizeFromLowerLeftWindow, p);
+        StartResize(m_bgPanel, p);
 
         m_resizeMode = RESIZE_MODE::FromLowerLeft;
 
@@ -159,12 +171,12 @@ void UI::Custom::SelectPanel::OnLeftDownForResizeFromLowerLeft(wxMouseEvent& eve
 
 void UI::Custom::SelectPanel::OnLeftDownForResizeFromLowerRight(wxMouseEvent& event) {
     wxPoint p = event.GetPosition();
-    wxSize sz = m_clickToResizeFromLowerRightWindow->GetClientSize();
+    wxSize sz = m_bgPanel->GetClientSize();
 
     // Check if the click is in the lower right of the window.
     if (sz.GetWidth() - p.x < m_resizeAreaLength &&
         sz.GetHeight() - p.y < m_resizeAreaLength) {
-        StartResize(m_clickToResizeFromLowerRightWindow, p);
+        StartResize(m_bgPanel, p);
 
         m_resizeMode = RESIZE_MODE::FromLowerRight;
 
@@ -173,6 +185,8 @@ void UI::Custom::SelectPanel::OnLeftDownForResizeFromLowerRight(wxMouseEvent& ev
         event.Skip();
     }
 }
+
+
 
 void UI::Custom::SelectPanel::OnLeftUp(wxMouseEvent& event) {
     if (m_resizeMode != RESIZE_MODE::None) {

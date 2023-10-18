@@ -28,6 +28,10 @@
 #include <wx/dcbuffer.h>
 #include <wx/version.h>
 
+#ifdef _WIN32
+#include <windows.h>
+#endif
+
 #include "GUI.h"
 
 namespace UI {
@@ -57,25 +61,33 @@ namespace UI {
 			};
 
 		protected:
-			//!< Event handler for initializing screen capture 
+			//!< Event handler for initializing screen capture
+			void OnLeftDownForInitCapturing(wxMouseEvent& event);
+
+			//!< Event handler for keyboard
+			void OnChar(wxKeyEvent& event);
+
+			//!< Event handler for escape screen capture
 			void GUISelectFrameOnClose(wxCloseEvent& event);
 
 			//!< Redrawing window event handlers
-			void OnBgPanelPaint(wxPaintEvent&);
+			void OnBgPanelPaint(wxPaintEvent& event);
 
 			//!< Event handlers for resizing
-			void OnLeftDownForResizeFromUpperLeft(wxMouseEvent&);
-			void OnLeftDownForResizeFromUpperRight(wxMouseEvent&);
-			void OnLeftDownForResizeFromLowerLeft(wxMouseEvent&);
-			void OnLeftDownForResizeFromLowerRight(wxMouseEvent&);
+			void OnLeftDownForResizeFromUpperLeft(wxMouseEvent& event);
+			void OnLeftDownForResizeFromUpperRight(wxMouseEvent& event);
+			void OnLeftDownForResizeFromLowerLeft(wxMouseEvent& event);
+			void OnLeftDownForResizeFromLowerRight(wxMouseEvent& event);
 
-			void OnLeftUp(wxMouseEvent&);
-			void OnMouseCaptureLost(wxMouseCaptureLostEvent&);
-			void OnResizeTimer(wxTimerEvent&);
+			
+
+			void OnLeftUp(wxMouseEvent& event);
+			void OnMouseCaptureLost(wxMouseCaptureLostEvent& event);
+			void OnResizeTimer(wxTimerEvent& event);
 
 			//!< Resizing helper functions
 			void DoDragBasedResize();
-			void StartResize(wxWindow*, const wxPoint&);
+			void StartResize(wxWindow* win, const wxPoint& p);
 			void CompleteResize(bool doFinalResize = false);
 
 			//!< Data and objects needed for resizing.
@@ -89,11 +101,8 @@ namespace UI {
 			wxSize m_initialFrameSize;
 			wxPoint m_initialFramePosition;
 
-			wxWindow* m_clickToResizeFromUpperRightWindow;
-			wxWindow* m_clickToResizeFromUpperLeftWindow;
-			wxWindow* m_clickToResizeFromLowerRightWindow;
-			wxWindow* m_clickToResizeFromLowerLeftWindow;
 			wxWindow* m_curResizeWindow;
+
 
 			//!< Internal panel for implementing GUI controls
 			wxPanel* m_bgPanel;
@@ -101,6 +110,7 @@ namespace UI {
 		public:
 			//!< Tracking state of selecting screen area.
 			std::atomic<bool>  atomic_b_croppingScreenIsRaised = false;
+			std::atomic<bool>  atomic_b_croppingScreenIsCanceled = false;
 
 			SelectPanel();
 			~SelectPanel();

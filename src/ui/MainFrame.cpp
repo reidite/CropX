@@ -72,10 +72,13 @@ void UI::MainFrame::ResetingSelectPanelProperties() {
 void UI::MainFrame::InitializingCroppingThread() {
 	pthrd_SreenCropper = new std::thread([&]() {
 		while (!(m_frame_SelectFrame->atomic_b_croppingScreenIsRaised));
-        m_captor->Capture(m_frame_SelectFrame);
+        m_frame_SelectFrame->atomic_b_croppingScreenIsRaised = false;
+        if (m_frame_SelectFrame->atomic_b_croppingScreenIsCanceled)
+            m_frame_SelectFrame->atomic_b_croppingScreenIsCanceled = false;
+        else
+            m_captor->Capture(m_frame_SelectFrame);
         this->Raise();
         this->Show(true);
-		m_frame_SelectFrame->atomic_b_croppingScreenIsRaised = false;
 	});
 }
 
@@ -94,10 +97,12 @@ void UI::MainFrame::InitializingActiveThread() {
             m_frame_SelectFrame->Show(true);
             Sleep(DEFAULT_ACTIVE_DELAY);
         }
-        m_captor->Capture(m_frame_SelectFrame);
-        
-        this->Raise();
-        this->Show(true);
         m_frame_SelectFrame->atomic_b_croppingScreenIsRaised = false;
+        if (m_frame_SelectFrame->atomic_b_croppingScreenIsCanceled)
+            m_frame_SelectFrame->atomic_b_croppingScreenIsCanceled = false;
+        else
+            m_captor->Capture(m_frame_SelectFrame);
+        this->Raise();
+        this->Show(true); 
     });
 }
