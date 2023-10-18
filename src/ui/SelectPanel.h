@@ -10,6 +10,11 @@
 // Licence:         GPL-3.0 license
 /////////////////////////////////////////////////////////////////////////////
 #pragma once
+
+//---------------------------------------------------------------------------
+// SelectPanel
+//---------------------------------------------------------------------------
+
 #if __WXGTK__
 #define BORDERLESS_FRAME_STYLE (wxFRAME_NO_TASKBAR)
 #else
@@ -25,15 +30,21 @@
 
 #include "GUI.h"
 
-namespace UI
-{
-	namespace Custom
-	{
-		class SelectPanel : public GUISelectFrame
-		{
+namespace UI {
+	namespace Custom {
+		/**  @class SelectPanel
+		
+		Select panel of the application getting screen coordinate from the
+		user and handling user adjustments.
+
+		This class defines handling functions for getting inputs from the user
+		to get the screen coordinate.
+		*/
+		class SelectPanel : public GUISelectFrame {
+
 		private:
-			enum RESIZE_MODE
-			{
+			/** Command IDs used for resizing the selecting window */
+			enum RESIZE_MODE {
 				None,
 				FromTop,
 				FromUpperLeft,
@@ -44,33 +55,36 @@ namespace UI
 				FromRight,
 				FromUpperRight
 			};
+
 		protected:
+			//!< Event handler for initializing screen capture 
 			void GUISelectFrameOnClose(wxCloseEvent& event);
 
-
-			// General event handlers
+			//!< Redrawing window event handlers
 			void OnBgPanelPaint(wxPaintEvent&);
 
-			// Event handlers for resizing
-			void OnLeftDownForResizeFromUpperRight(wxMouseEvent&);
+			//!< Event handlers for resizing
 			void OnLeftDownForResizeFromUpperLeft(wxMouseEvent&);
-			void OnLeftDownForResizeFromLowerRight(wxMouseEvent&);
+			void OnLeftDownForResizeFromUpperRight(wxMouseEvent&);
 			void OnLeftDownForResizeFromLowerLeft(wxMouseEvent&);
+			void OnLeftDownForResizeFromLowerRight(wxMouseEvent&);
 
 			void OnLeftUp(wxMouseEvent&);
 			void OnMouseCaptureLost(wxMouseCaptureLostEvent&);
 			void OnResizeTimer(wxTimerEvent&);
 
-			// Resizing helper functions
+			//!< Resizing helper functions
 			void DoDragBasedResize();
 			void StartResize(wxWindow*, const wxPoint&);
 			void CompleteResize(bool doFinalResize = false);
 
-			// Data and objects needed for resizing.
+			//!< Data and objects needed for resizing.
+			RESIZE_MODE m_resizeMode;
+
 			wxTimer m_resizeTimer;
 			int m_resizeFrequency;
 			int m_resizeAreaLength;
-			RESIZE_MODE m_resizeMode;
+			
 			wxPoint m_resizeStartPoint;
 			wxSize m_initialFrameSize;
 			wxPoint m_initialFramePosition;
@@ -81,12 +95,15 @@ namespace UI
 			wxWindow* m_clickToResizeFromLowerLeftWindow;
 			wxWindow* m_curResizeWindow;
 
-			// GUI controls
+			//!< Internal panel for implementing GUI controls
 			wxPanel* m_bgPanel;
+
 		public:
+			//!< Tracking state of selecting screen area.
 			std::atomic<bool>  atomic_b_croppingScreenIsRaised = false;
 
 			SelectPanel();
+			~SelectPanel();
 		};
 	}
 }

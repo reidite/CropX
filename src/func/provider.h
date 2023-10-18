@@ -11,6 +11,10 @@
 // Licence:         GPL-3.0 license
 /////////////////////////////////////////////////////////////////////////////
 
+//---------------------------------------------------------------------------
+// Provider
+//---------------------------------------------------------------------------
+
 #include <thread>
 #include <windows.h>
 #include <ole2.h>
@@ -19,23 +23,37 @@
 #include <uiautomationclient.h>
 
 namespace Func{
-    class Provider
-    {
+    /** @class Provider
+
+        Provider provides a functioning for the application accessing to the UI 
+        elements properties on the client side.
+
+        This class getting the correct rendering rectangle of each UI element
+        which is pointed by the cursor.
+    */
+    class Provider {
     public:
-        unsigned int n_x;
-        unsigned int n_y;
+        //!< Client UI rendering infos
+        unsigned int x;
+        unsigned int y;
         unsigned int width;
         unsigned int height;
 
         Provider();
+        //!< Container for the pointed client UI element
         IUIAutomationElement* element;
+        //!< Container for the parent of the pointed client UI element
         IUIAutomationElement* parent;
+
+        //!< Data retrieving functionality for the pointed UI element
         HRESULT GetActiveComponent(int x, int y);
 
     private:
         ~Provider();
         
+        //!< Container for the UI element retrivor
         IUIAutomation* m_automation;
+        //!< Container for the UI element traveller
         IUIAutomationTreeWalker* walker;
     };
 }

@@ -22,7 +22,6 @@
 #include <wx/button.h>
 #include <wx/sizer.h>
 #include <wx/frame.h>
-#include <wx/statbmp.h>
 
 ///////////////////////////////////////////////////////////////////////////
 
@@ -48,7 +47,7 @@ class GUIMainFrame : public wxFrame
 	
 	public:
 		
-		GUIMainFrame( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxEmptyString, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 300,100 ), long style = wxDEFAULT_FRAME_STYLE|wxSTAY_ON_TOP|wxSUNKEN_BORDER );
+		GUIMainFrame( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxEmptyString, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxCAPTION|wxCLOSE_BOX|wxICONIZE|wxSTAY_ON_TOP|wxSUNKEN_BORDER );
 		
 		~GUIMainFrame();
 	
@@ -72,25 +71,6 @@ class GUISelectFrame : public wxFrame
 		GUISelectFrame( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxEmptyString, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 500,300 ), long style = wxFRAME_NO_TASKBAR|wxSTAY_ON_TOP|wxTRANSPARENT_WINDOW );
 		
 		~GUISelectFrame();
-	
-};
-
-///////////////////////////////////////////////////////////////////////////////
-/// Class GUIScreenFrame
-///////////////////////////////////////////////////////////////////////////////
-class GUIScreenFrame : public wxFrame 
-{
-	private:
-	
-	protected:
-	
-	public:
-		wxGridSizer* gSizer_Screen;
-		wxStaticBitmap* m_bitmap_Screen;
-		
-		GUIScreenFrame( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxEmptyString, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 500,300 ), long style = wxFRAME_NO_TASKBAR|wxCLIP_CHILDREN|wxNO_BORDER );
-		
-		~GUIScreenFrame();
 	
 };
 

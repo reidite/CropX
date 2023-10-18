@@ -1,11 +1,19 @@
 #include "Provider.h"
 
+// ----------------------------------------------------------------------------
+// CaptureMechanism - Construction
+// ----------------------------------------------------------------------------
+
 Func::Provider::Provider() {
 	while (FAILED(CoInitialize(NULL)));
 	while (FAILED(CoCreateInstance(__uuidof(CUIAutomation), NULL,
 		CLSCTX_INPROC_SERVER, IID_PPV_ARGS(&m_automation))));
 	m_automation->get_ControlViewWalker(&walker);
 }
+
+// ----------------------------------------------------------------------------
+// CaptureMechanism - Functions
+// ----------------------------------------------------------------------------
 
 HRESULT Func::Provider::GetActiveComponent(int x, int y) {
 	POINT pt = { x, y };
@@ -14,8 +22,8 @@ HRESULT Func::Provider::GetActiveComponent(int x, int y) {
 	if (SUCCEEDED(element->GetCurrentPropertyValue(UIA_BoundingRectanglePropertyId, &varValue))) {
 		double* pData;
 		SafeArrayAccessData(varValue.parray, (void**)&pData);
-		n_x = static_cast<unsigned int>(pData[0]);
-		n_y = static_cast<unsigned int>(pData[1]);
+		x = static_cast<unsigned int>(pData[0]);
+		y = static_cast<unsigned int>(pData[1]);
 		width = static_cast<unsigned int>(pData[2]);
 		height = static_cast<unsigned int>(pData[3]);
 		
@@ -25,8 +33,8 @@ HRESULT Func::Provider::GetActiveComponent(int x, int y) {
 			SafeArrayAccessData(varValue.parray, (void**)&pData);
 			if (width > static_cast<unsigned int>(pData[2]) ||
 				height > static_cast<unsigned int>(pData[3])) {
-				n_x = static_cast<unsigned int>(pData[0]);
-				n_y = static_cast<unsigned int>(pData[1]);
+				x = static_cast<unsigned int>(pData[0]);
+				y = static_cast<unsigned int>(pData[1]);
 				width = static_cast<unsigned int>(pData[2]);
 				height = static_cast<unsigned int>(pData[3]);
 			}

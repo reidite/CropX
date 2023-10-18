@@ -5,11 +5,22 @@
 // Maintainer:      Vincent Nguyen
 // Contributors:    N/A
 // Created:         09/10/2023
-// Last edit:       17/10/2023
+// Last edit:       18/10/2023
 // Copyright:       Anyone
 // Licence:         GPL-3.0 license
 /////////////////////////////////////////////////////////////////////////////
 #pragma once
+
+//---------------------------------------------------------------------------
+// CaptureMechanism
+//---------------------------------------------------------------------------
+
+//!< Definition of default delay time for the capturing process 
+#define DEFAULT_DELAY 600
+//!< Definition of the minimum pixel different value that require 
+//!  updating display
+#define DISPLAY_UPDATE_EPS 5
+
 #include "wx/window.h"
 #include "wx/bitmap.h"
 #include "wx/display.h"
@@ -17,7 +28,6 @@
 #include "wx/dcscreen.h"
 #include "wx/dcmemory.h"
 #include "wx/string.h"
-#include <wx/dcgraph.h>
 
 #include <string>
 #include <vector>
@@ -26,17 +36,8 @@
 #include <sstream>
 
 
-#include "shlobj_core.h"
-#include "shellscalingapi.h"
-#include "uiautomationcore.h"
-
-#include "wx/gdicmn.h"
-
-//!< Definition of default delay time for the capturing process 
-#define DEFAULT_DELAY 600
-
-#define DEFAULT_DISPLAY_EPS 10
 namespace Func {
+    /** Format IDs used for deciding which type of encoding to save file */
     enum Format {
         PNG = 0,
         JPEG = 1,
@@ -44,6 +45,7 @@ namespace Func {
         WEBP = 3
     };
 
+    /** Naming IDs used for deciding which type of name to generate */
     enum Naming {
         Numeric = 0,
         Date = 1,
@@ -51,6 +53,7 @@ namespace Func {
         Empty = 3
     };
 
+    /** Mode IDs used for deciding which mode to capture the screen */
     enum Mode {
         None = 0,
         Full = 1,
@@ -58,6 +61,7 @@ namespace Func {
         Active = 3,
     };
 
+    /** Result IDs used for return result of the capturing process */
     enum Result {
         Failure = 0,
         Success = 1,
@@ -70,37 +74,53 @@ namespace Func {
         wxSize physicalResolution;
     };
 
-    class CaptureMechanism
-    {
+    /** @class CaptureMechanism
+    
+        CaptureMechanism provides an easy-to-use and adjustable facility to
+        take screenshots for all controls fully automatically and correctly.
+
+        This class defines screen capturing functions and handing output
+        saving.
+    */
+    class CaptureMechanism {
+    
     private:
+        //!< Container for the capturing image from screen
+        wxBitmap bitmap_Saved;
+        //!< Path leading to the saving directory
         wxString str_defaultDir;
+        //!< Prefix string for the saving file
         wxString str_prefix;
+
+        //!< Setting up for each mode of screen capturing
         void CapturingAllScreen(wxRect geomegy);
         void CapturingArea(wxRect geomegy);
         void CapturingActive(wxRect geomegy);
 
+        //!< Processing grabbing image from screen
         void GrabbingScreenshot(wxRect geomegy, int delay);
 
-        void Union();
+        //!< Processing delaying time before grabbing
         void Delay(int miliseconds);
+
+        //!< Processing exporing the output image
         void Save();
 
     public:
-        wxBitmap* bitmap_Saved;
-
+        //!< Fullscreen rendering rect's properties
         wxPoint pts_mostUpperLeftPosition;
         wxSize size_fullExtendedPhysicalDisplay;
         
-
+        //!< Capturing mode
         Mode mode_captureType = Mode::None;
 
+        //!< Displaying infos
         std::vector<DISPLAYINFO> infos_displayHandlers;
 
         CaptureMechanism();
-
         ~CaptureMechanism() { }
         
+        //!< Capturing the screen
         void Capture(wxWindow* selectFrame);
-
     };
 }

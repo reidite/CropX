@@ -1,9 +1,14 @@
 #include "SelectPanel.h"
 
+// --------------------------------------------------------------------------
+// SelectPanel - Construction
+// --------------------------------------------------------------------------
+
 UI::Custom::SelectPanel::SelectPanel()
-	: GUISelectFrame(nullptr, wxID_ANY, wxString(""), wxDefaultPosition, wxDefaultSize, BORDERLESS_FRAME_STYLE) {
-    SetTransparent(100);
+	: GUISelectFrame(nullptr, wxID_ANY, wxString(""), 
+        wxDefaultPosition, wxDefaultSize, BORDERLESS_FRAME_STYLE) {
 	// Set up the UI.
+    SetTransparent(100);
 	m_bgPanel = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxDefaultSize,
 		wxTAB_TRAVERSAL | wxFULL_REPAINT_ON_RESIZE);
 	m_bgPanel->SetBackgroundStyle(wxBG_STYLE_PAINT);
@@ -60,122 +65,139 @@ UI::Custom::SelectPanel::SelectPanel()
         &SelectPanel::OnMouseCaptureLost, this);
 }
 
+UI::Custom::SelectPanel::~SelectPanel() {}
+
+// --------------------------------------------------------------------------
+// SelectPanel - Event Handlers
+// --------------------------------------------------------------------------
+
 void UI::Custom::SelectPanel::GUISelectFrameOnClose(wxCloseEvent& event) {
+    // Raising the tracking state to init the capturing thread.
 	atomic_b_croppingScreenIsRaised = true;
 	this->Show(false);
 }
 
-void UI::Custom::SelectPanel::OnLeftDownForResizeFromUpperLeft(wxMouseEvent& event)
-{
+void UI::Custom::SelectPanel::OnBgPanelPaint(wxPaintEvent&) {
+    wxAutoBufferedPaintDC dc(m_bgPanel);
+
+    dc.Clear();
+    wxPen pen(wxColor(152, 0, 0), 5);
+    dc.SetPen(pen);
+
+
+    // Draw some red marks to indicate the upper left resize area
+    wxPoint upperLeft = m_bgPanel->GetClientRect().GetTopLeft();
+    dc.DrawLine(upperLeft + wxPoint(0, m_resizeAreaLength), upperLeft);
+    dc.DrawLine(upperLeft, upperLeft + wxPoint(m_resizeAreaLength, 0));
+
+    // Draw some red marks to indicate the upper right resize area
+    wxPoint upperRight = m_bgPanel->GetClientRect().GetTopRight();
+    dc.DrawLine(upperRight + wxPoint(0, m_resizeAreaLength), upperRight);
+    dc.DrawLine(upperRight, upperRight - wxPoint(m_resizeAreaLength, 0));
+
+    // Draw some red marks to indicate the lower left resize area
+    wxPoint lowerLeft = m_bgPanel->GetClientRect().GetBottomLeft();
+    dc.DrawLine(lowerLeft - wxPoint(0, m_resizeAreaLength), lowerLeft);
+    dc.DrawLine(lowerLeft, lowerLeft + wxPoint(m_resizeAreaLength, 0));
+
+    // Draw some red marks to indicate the lower right resize area
+    wxPoint lowerRight = m_bgPanel->GetClientRect().GetBottomRight();
+    dc.DrawLine(lowerRight - wxPoint(0, m_resizeAreaLength), lowerRight);
+    dc.DrawLine(lowerRight, lowerRight - wxPoint(m_resizeAreaLength, 0));
+}
+
+void UI::Custom::SelectPanel::OnLeftDownForResizeFromUpperLeft(wxMouseEvent& event) {
     wxPoint p = event.GetPosition();
     wxSize sz = m_clickToResizeFromUpperLeftWindow->GetClientSize();
 
     // Check if the click is in the lower left of the window.
     if (p.x < m_resizeAreaLength &&
-        p.y < m_resizeAreaLength)
-    {
+        p.y < m_resizeAreaLength) {
         StartResize(m_clickToResizeFromUpperLeftWindow, p);
 
         m_resizeMode = RESIZE_MODE::FromUpperLeft;
 
         SetCursor(wxCursor(wxCURSOR_SIZENESW));
-    }
-    else
-    {
+    } else {
         event.Skip();
     }
 }
 
-void UI::Custom::SelectPanel::OnLeftDownForResizeFromUpperRight(wxMouseEvent& event)
-{
+void UI::Custom::SelectPanel::OnLeftDownForResizeFromUpperRight(wxMouseEvent& event) {
     wxPoint p = event.GetPosition();
     wxSize sz = m_clickToResizeFromUpperRightWindow->GetClientSize();
 
     // Check if the click is in the lower right of the window.
     if (sz.GetWidth() - p.x < m_resizeAreaLength &&
-        p.y < m_resizeAreaLength)
-    {
+        p.y < m_resizeAreaLength) {
         StartResize(m_clickToResizeFromUpperRightWindow, p);
 
         m_resizeMode = RESIZE_MODE::FromUpperRight;
 
         SetCursor(wxCursor(wxCURSOR_SIZENWSE));
-    }
-    else
-    {
+    } else {
         event.Skip();
     }
 }
 
-void UI::Custom::SelectPanel::OnLeftDownForResizeFromLowerLeft(wxMouseEvent& event)
-{
+void UI::Custom::SelectPanel::OnLeftDownForResizeFromLowerLeft(wxMouseEvent& event) {
     wxPoint p = event.GetPosition();
     wxSize sz = m_clickToResizeFromLowerLeftWindow->GetClientSize();
 
     // Check if the click is in the lower left of the window.
     if (p.x < m_resizeAreaLength &&
-        sz.GetHeight() - p.y < m_resizeAreaLength)
-    {
+        sz.GetHeight() - p.y < m_resizeAreaLength) {
         StartResize(m_clickToResizeFromLowerLeftWindow, p);
 
         m_resizeMode = RESIZE_MODE::FromLowerLeft;
 
         SetCursor(wxCursor(wxCURSOR_SIZENESW));
-    }
-    else
-    {
+    } else {
         event.Skip();
     }
 }
 
-void UI::Custom::SelectPanel::OnLeftDownForResizeFromLowerRight(wxMouseEvent& event)
-{
+void UI::Custom::SelectPanel::OnLeftDownForResizeFromLowerRight(wxMouseEvent& event) {
     wxPoint p = event.GetPosition();
     wxSize sz = m_clickToResizeFromLowerRightWindow->GetClientSize();
 
     // Check if the click is in the lower right of the window.
     if (sz.GetWidth() - p.x < m_resizeAreaLength &&
-        sz.GetHeight() - p.y < m_resizeAreaLength)
-    {
+        sz.GetHeight() - p.y < m_resizeAreaLength) {
         StartResize(m_clickToResizeFromLowerRightWindow, p);
 
         m_resizeMode = RESIZE_MODE::FromLowerRight;
 
         SetCursor(wxCursor(wxCURSOR_SIZENWSE));
-    }
-    else
-    {
+    } else {
         event.Skip();
     }
 }
 
-void UI::Custom::SelectPanel::OnLeftUp(wxMouseEvent& event)
-{
-    if (m_resizeMode != RESIZE_MODE::None)
-    {
+void UI::Custom::SelectPanel::OnLeftUp(wxMouseEvent& event) {
+    if (m_resizeMode != RESIZE_MODE::None) {
         CompleteResize(true);
     }
-    else
-    {
+    else {
         event.Skip();
     }
 }
 
-void UI::Custom::SelectPanel::OnMouseCaptureLost(wxMouseCaptureLostEvent&)
-{
-    if (m_resizeMode != RESIZE_MODE::None)
-    {
+void UI::Custom::SelectPanel::OnMouseCaptureLost(wxMouseCaptureLostEvent&) {
+    if (m_resizeMode != RESIZE_MODE::None) {
         CompleteResize(false);
     }
 }
 
-void UI::Custom::SelectPanel::OnResizeTimer(wxTimerEvent&)
-{
+void UI::Custom::SelectPanel::OnResizeTimer(wxTimerEvent&) {
     DoDragBasedResize();
 }
 
-void UI::Custom::SelectPanel::DoDragBasedResize()
-{
+// --------------------------------------------------------------------------
+// SelectPanel - Functions
+// --------------------------------------------------------------------------
+
+void UI::Custom::SelectPanel::DoDragBasedResize() {
     wxMouseState ms = ::wxGetMouseState();
     wxPoint curMousePsn = ms.GetPosition();
     wxPoint dragVector = curMousePsn - m_resizeStartPoint;
@@ -212,8 +234,7 @@ void UI::Custom::SelectPanel::DoDragBasedResize()
     SetSize(newPsn.x, newPsn.y, newSize.GetWidth(), newSize.GetHeight());
 }
 
-void UI::Custom::SelectPanel::StartResize(wxWindow* win, const wxPoint& p)
-{
+void UI::Custom::SelectPanel::StartResize(wxWindow* win, const wxPoint& p) {
     m_curResizeWindow = win;
     m_resizeTimer.Start(m_resizeFrequency);
     m_resizeStartPoint = m_curResizeWindow->ClientToScreen(p);
@@ -222,10 +243,8 @@ void UI::Custom::SelectPanel::StartResize(wxWindow* win, const wxPoint& p)
     m_initialFrameSize = GetSize();
 }
 
-void UI::Custom::SelectPanel::CompleteResize(bool doFinalResize)
-{
-    if (doFinalResize)
-    {
+void UI::Custom::SelectPanel::CompleteResize(bool doFinalResize) {
+    if (doFinalResize) {
         DoDragBasedResize();
     }
 
@@ -235,40 +254,10 @@ void UI::Custom::SelectPanel::CompleteResize(bool doFinalResize)
 
     SetCursor(wxCursor(wxCURSOR_ARROW));
 
-    if (m_curResizeWindow && m_curResizeWindow->HasCapture())
-    {
+    if (m_curResizeWindow && m_curResizeWindow->HasCapture()) {
         m_curResizeWindow->ReleaseMouse();
     }
 
     m_curResizeWindow = NULL;
 }
 
-void UI::Custom::SelectPanel::OnBgPanelPaint(wxPaintEvent&)
-{
-    wxAutoBufferedPaintDC dc(m_bgPanel);
- 
-    dc.Clear();
-    wxPen pen(wxColor(152, 0, 0), 5);
-    dc.SetPen(pen);
-
-
-    // Draw some red marks to indicate the upper left resize area
-    wxPoint upperLeft = m_bgPanel->GetClientRect().GetTopLeft();
-    dc.DrawLine(upperLeft + wxPoint(0, m_resizeAreaLength), upperLeft);
-    dc.DrawLine(upperLeft, upperLeft + wxPoint(m_resizeAreaLength, 0));
-
-    // Draw some red marks to indicate the upper right resize area
-    wxPoint upperRight = m_bgPanel->GetClientRect().GetTopRight();
-    dc.DrawLine(upperRight + wxPoint(0, m_resizeAreaLength), upperRight);
-    dc.DrawLine(upperRight, upperRight - wxPoint(m_resizeAreaLength, 0));
-
-    // Draw some red marks to indicate the lower left resize area
-    wxPoint lowerLeft = m_bgPanel->GetClientRect().GetBottomLeft();
-    dc.DrawLine(lowerLeft - wxPoint(0, m_resizeAreaLength), lowerLeft);
-    dc.DrawLine(lowerLeft, lowerLeft + wxPoint(m_resizeAreaLength, 0));
-
-    // Draw some red marks to indicate the lower right resize area
-    wxPoint lowerRight = m_bgPanel->GetClientRect().GetBottomRight();
-    dc.DrawLine(lowerRight - wxPoint(0, m_resizeAreaLength), lowerRight);
-    dc.DrawLine(lowerRight, lowerRight - wxPoint(m_resizeAreaLength, 0));
-}

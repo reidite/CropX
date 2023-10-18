@@ -157,20 +157,16 @@
     <ClCompile Include="src\func\capture.cpp" />
     <ClCompile Include="src\func\provider.cpp" />
     <ClCompile Include="src\main.cpp" />
-    <ClCompile Include="src\ui\custom\frame.cpp" />
     <ClCompile Include="src\ui\GUI.cpp" />
     <ClCompile Include="src\ui\MainFrame.cpp" />
-    <ClCompile Include="src\ui\ScreenFrame.cpp" />
     <ClCompile Include="src\ui\SelectPanel.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h" />
     <ClInclude Include="src\func\capture.h" />
     <ClInclude Include="src\func\provider.h" />
-    <ClInclude Include="src\ui\custom\frame.h" />
     <ClInclude Include="src\ui\GUI.h" />
     <ClInclude Include="src\ui\MainFrame.h" />
-    <ClInclude Include="src\ui\ScreenFrame.h" />
     <ClInclude Include="src\ui\SelectPanel.h" />
   </ItemGroup>
   <ItemGroup>

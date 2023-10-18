@@ -6,11 +6,11 @@
 
 
 // ----------------------------------------------------------------------------
-// CaptureMechanism
+// CaptureMechanism - Construction
 // ----------------------------------------------------------------------------
 
 Func::CaptureMechanism::CaptureMechanism() {
-	// Get the primary display
+	// Get the primary display properties
 	int primaryIndex = wxDisplay::GetFromPoint(wxPoint(0, 0));
 	wxDisplay primaryDisplay(primaryIndex);
 	pts_mostUpperLeftPosition = { 0, 0 };
@@ -18,6 +18,8 @@ Func::CaptureMechanism::CaptureMechanism() {
 		primaryDisplay.GetCurrentMode().GetWidth(),
 		primaryDisplay.GetCurrentMode().GetHeight()
 	};
+
+	// Get the other display properties
 	for (int i = 0; i < wxDisplay::GetCount(); i++) {
 		wxDisplay display(i);
 		wxRect screen = display.GetGeometry();
@@ -27,35 +29,43 @@ Func::CaptureMechanism::CaptureMechanism() {
 			wxSize({display.GetCurrentMode().GetWidth(), 
 				display.GetCurrentMode().GetHeight()})
 		});
-		if (i != primaryIndex) {
-			if (screen.x < pts_mostUpperLeftPosition.x - DEFAULT_DISPLAY_EPS) {
-				pts_mostUpperLeftPosition.x = screen.x;
+		if (i == primaryIndex) continue;
+		
+		// Get the other display orientation
+		if (abs(pts_mostUpperLeftPosition.x - screen.x) >= DISPLAY_UPDATE_EPS) {
+			if (abs(pts_mostUpperLeftPosition.x - screen.x) <=
+				display.GetCurrentMode().GetWidth() - DISPLAY_UPDATE_EPS)
 				size_fullExtendedPhysicalDisplay.x +=
-					display.GetCurrentMode().GetWidth();
-			}
-			else if (screen.x >= pts_mostUpperLeftPosition.x + 
-									size_fullExtendedPhysicalDisplay.x) {
-				size_fullExtendedPhysicalDisplay.x += 
-					display.GetCurrentMode().GetWidth();
-			}
-			if (screen.y < pts_mostUpperLeftPosition.y - DEFAULT_DISPLAY_EPS) {
-				pts_mostUpperLeftPosition.y = screen.y;
+				abs(pts_mostUpperLeftPosition.x - screen.x);
+			else
+				size_fullExtendedPhysicalDisplay.x +=
+				display.GetCurrentMode().GetWidth();
+			if (pts_mostUpperLeftPosition.x - screen.x >= DISPLAY_UPDATE_EPS)
+				pts_mostUpperLeftPosition.x = screen.x;
+		}
+		else if (screen.x >= pts_mostUpperLeftPosition.x +
+			size_fullExtendedPhysicalDisplay.x) {
+			size_fullExtendedPhysicalDisplay.x +=
+				display.GetCurrentMode().GetWidth();
+		}
+		if (abs(pts_mostUpperLeftPosition.y - screen.y) >= DISPLAY_UPDATE_EPS) {
+			if (abs(pts_mostUpperLeftPosition.y - screen.y) <=
+				display.GetCurrentMode().GetHeight() - DISPLAY_UPDATE_EPS)
 				size_fullExtendedPhysicalDisplay.y +=
-					display.GetCurrentMode().GetHeight();
-			}
-			else if	(screen.y >= pts_mostUpperLeftPosition.y + 
-									size_fullExtendedPhysicalDisplay.y) {
-				size_fullExtendedPhysicalDisplay.y += 
-					display.GetCurrentMode().GetHeight();
-			}
+				abs(pts_mostUpperLeftPosition.y - screen.y);
+			else
+				size_fullExtendedPhysicalDisplay.y +=
+				display.GetCurrentMode().GetHeight();
 
-			if (screen.width > size_fullExtendedPhysicalDisplay.x)
-				size_fullExtendedPhysicalDisplay.x = screen.width;
-
-			if (screen.height > size_fullExtendedPhysicalDisplay.y)
-				size_fullExtendedPhysicalDisplay.y = screen.height;
+			if (pts_mostUpperLeftPosition.y - screen.y >= DISPLAY_UPDATE_EPS)
+				pts_mostUpperLeftPosition.y = screen.y;
 		}
 
+		if (screen.width > size_fullExtendedPhysicalDisplay.x)
+			size_fullExtendedPhysicalDisplay.x = screen.width;
+
+		if (screen.height > size_fullExtendedPhysicalDisplay.y)
+			size_fullExtendedPhysicalDisplay.y = screen.height;
 	}
 
 	str_defaultDir = getenv("USERPROFILE");
@@ -63,12 +73,14 @@ Func::CaptureMechanism::CaptureMechanism() {
 	return;
 }
 
+// ----------------------------------------------------------------------------
+// CaptureMechanism - Functions
+// ----------------------------------------------------------------------------
 
 void Func::CaptureMechanism::CapturingAllScreen(wxRect geomegy) {
 	str_prefix = "-screenshot-Full";
 	GrabbingScreenshot(geomegy, DEFAULT_DELAY);
 }
-
 
 void Func::CaptureMechanism::CapturingArea(wxRect geomegy) {
 	str_prefix = "-screenshot-Area";
@@ -81,20 +93,18 @@ void Func::CaptureMechanism::CapturingActive(wxRect geomegy) {
 }
 
 void Func::CaptureMechanism::GrabbingScreenshot(wxRect geomegy, int delay) {
-#ifdef _WIN32
-	//windows code goes here
+	// Delaying before image grabbing
 	if (delay) Delay(delay);
-
 	// Create a DC for the whole screen area
 	wxScreenDC dcScreen;
 	// Create a memory DC that will be used for actually taking the screenshot
 	wxMemoryDC dcCapture;
-	bitmap_Saved = new wxBitmap(
+	bitmap_Saved.Create(
 		geomegy.width, 
 		geomegy.height,
 		wxBITMAP_SCREEN_DEPTH
 	);
-	dcCapture.SelectObject(*bitmap_Saved);
+	dcCapture.SelectObject(bitmap_Saved);
 	dcCapture.Clear();
 
 	// Blit the actual screen on the memory DC
@@ -108,24 +118,11 @@ void Func::CaptureMechanism::GrabbingScreenshot(wxRect geomegy, int delay) {
 	);
 
 	//// Select the Bitmap out of the memory DC
-	dcCapture.SelectObject(wxNullBitmap);
 	dcScreen.Clear();
+	dcCapture.SelectObject(wxNullBitmap);
 	Save();
-#elif __linux__
-	//linux  code goes here
-
-#elif __WXMAC__
-	//mac code goes here
-
-#else
-
-#endif
-
 }
 
-void Func::CaptureMechanism::Union() {
-
-}
 
 void Func::CaptureMechanism::Delay(int miliseconds) {
 	clock_t start = clock();
@@ -155,16 +152,19 @@ void Func::CaptureMechanism::Save() {
 		fullFileName.SetName(fullFileName.GetName() + "_");
 
 	// save the screenshot as a PNG
-	bitmap_Saved->SaveFile(fullFileName.GetFullPath(), wxBITMAP_TYPE_PNG);
-	delete bitmap_Saved;
+	bitmap_Saved.SaveFile(fullFileName.GetFullPath(), wxBITMAP_TYPE_PNG);
 }
 
+
 void Func::CaptureMechanism::Capture(wxWindow* selectFrame) {
+	// Processing fullscreen capture
 	if (mode_captureType == Mode::Full) {
 		CapturingAllScreen(selectFrame->GetScreenRect());
 		mode_captureType = Mode::None;
 		return;
 	}
+
+	// Converting logical coordinates to physical ones
 	int displayIDx = wxDisplay::GetFromWindow(selectFrame);
 	std::pair<double, double> pair_scaleFactors = {
 		static_cast<double>(infos_displayHandlers[displayIDx].physicalResolution.x) /
@@ -182,6 +182,7 @@ void Func::CaptureMechanism::Capture(wxWindow* selectFrame) {
 		geo.height * pair_scaleFactors.second
 	);
 
+	// Processing other captures
 	if (mode_captureType == Mode::Area) {
 		CapturingArea(physical_geo);
 	}

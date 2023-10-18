@@ -5,12 +5,11 @@
 // Maintainer:      Vincent Nguyen
 // Contributors:    N/A
 // Created:         09/10/2023
-// Last edit:       09/10/2023
+// Last edit:       18/10/2023
 // Copyright:       Anyone
 // Licence:         GPL-3.0 license
 /////////////////////////////////////////////////////////////////////////////
 #include "wx/app.h"
-#include "wx/richtext/richtextxml.h"
 #include "ui/Mainframe.h"
 
 //---------------------------------------------------------------------------
@@ -24,8 +23,6 @@ class CropX : public wxApp {
 private:
     //!< Container of the main frame instance
     UI::MainFrame* mp_frame_MainFrame;
-
-    
 
 public:
     CropX() { }
@@ -47,12 +44,8 @@ bool CropX::OnInit() {
     // Init all Image handlers
     wxInitAllImageHandlers();
 
-    // Add richtext extra handlers (plain text is automatically added)
-    wxRichTextBuffer::AddHandler(new wxRichTextXMLHandler);
-
+    // Creating the main frame íntance and setting up its icon 
     mp_frame_MainFrame = new UI::MainFrame();
-
-    mp_frame_MainFrame->SetSize(wxSize(MAINFRAME_WIDTH, MAINFRAME_HEIGHT));
     mp_frame_MainFrame->SetIcon(wxIcon("IDB_PNG_FULL", 32, 32));
     mp_frame_MainFrame->Show(true);
 

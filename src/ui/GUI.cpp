@@ -11,31 +11,26 @@
 
 GUIMainFrame::GUIMainFrame( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : wxFrame( parent, id, title, pos, size, style )
 {
-	this->SetSizeHints( wxSize( 300,100 ), wxDefaultSize );
+	this->SetSizeHints( wxSize( -1,-1 ), wxDefaultSize );
 	this->SetForegroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_WINDOW ) );
 	this->SetBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_WINDOW ) );
 	
 	wxGridSizer* gSizer5;
 	gSizer5 = new wxGridSizer( 1, 3, 0, 0 );
 	
-	m_bpButton_Full = new wxBitmapButton( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( 50,50 ), wxBU_AUTODRAW );
-	m_bpButton_Full->SetMinSize( wxSize( 50,50 ) );
-	
+	m_bpButton_Full = new wxBitmapButton( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( -1,-1 ), wxBU_AUTODRAW );
 	gSizer5->Add( m_bpButton_Full, 0, wxEXPAND, 5 );
 	
-	m_bpButton_Area = new wxBitmapButton( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( 50,50 ), wxBU_AUTODRAW );
-	m_bpButton_Area->SetMinSize( wxSize( 50,50 ) );
-	
+	m_bpButton_Area = new wxBitmapButton( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( -1,-1 ), wxBU_AUTODRAW );
 	gSizer5->Add( m_bpButton_Area, 0, wxEXPAND, 5 );
 	
-	m_bpButton_Active = new wxBitmapButton( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( 50,50 ), wxBU_AUTODRAW );
-	m_bpButton_Active->SetMinSize( wxSize( 50,50 ) );
-	
+	m_bpButton_Active = new wxBitmapButton( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( -1,-1 ), wxBU_AUTODRAW );
 	gSizer5->Add( m_bpButton_Active, 0, wxEXPAND, 5 );
 	
 	
 	this->SetSizer( gSizer5 );
 	this->Layout();
+	gSizer5->Fit( this );
 	
 	this->Centre( wxBOTH );
 	
@@ -74,24 +69,4 @@ GUISelectFrame::~GUISelectFrame()
 	// Disconnect Events
 	this->Disconnect( wxEVT_CLOSE_WINDOW, wxCloseEventHandler( GUISelectFrame::GUISelectFrameOnClose ) );
 	
-}
-
-GUIScreenFrame::GUIScreenFrame( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : wxFrame( parent, id, title, pos, size, style )
-{
-	this->SetSizeHints( wxDefaultSize, wxDefaultSize );
-	
-	gSizer_Screen = new wxGridSizer( 1, 1, 0, 0 );
-	
-	m_bitmap_Screen = new wxStaticBitmap( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, 0 );
-	gSizer_Screen->Add( m_bitmap_Screen, 0, wxEXPAND, 5 );
-	
-	
-	this->SetSizer( gSizer_Screen );
-	this->Layout();
-	
-	this->Centre( wxBOTH );
-}
-
-GUIScreenFrame::~GUIScreenFrame()
-{
 }
