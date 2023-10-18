@@ -89,6 +89,7 @@ void UI::MainFrame::InitializingActiveThread() {
                                                             m_provider->y));
                 m_frame_SelectFrame->SetSize(wxSize(m_provider->width,
                                                         m_provider->height));
+                m_frame_SelectFrame->Raise();
             }
             m_frame_SelectFrame->Show(true);
             Sleep(DEFAULT_ACTIVE_DELAY);
