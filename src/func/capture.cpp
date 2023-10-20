@@ -51,6 +51,8 @@ Func::CaptureMechanism::CaptureMechanism() {
 	return;
 }
 
+Func::CaptureMechanism::~CaptureMechanism() {}
+
 // ----------------------------------------------------------------------------
 // CaptureMechanism - Functions
 // ----------------------------------------------------------------------------

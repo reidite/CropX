@@ -21,7 +21,19 @@ UI::MainFrame::MainFrame()
     m_frame_SelectFrame = new Custom::SelectPanel();
 }
 
-UI::MainFrame::~MainFrame() {}
+UI::MainFrame::~MainFrame() {
+    delete m_captor;
+    delete m_provider;
+    if (pthrd_SreenCropper) {
+        pthrd_SreenCropper->join();
+        delete pthrd_SreenCropper;
+    }
+    if (pthrd_SreenActiveSelector) {
+        pthrd_SreenActiveSelector->join();
+        delete pthrd_SreenActiveSelector;
+    }
+    m_frame_SelectFrame->Destroy();
+}
 
 // --------------------------------------------------------------------------
 // MainFrame - Event Handlers
@@ -29,7 +41,6 @@ UI::MainFrame::~MainFrame() {}
 
 void UI::MainFrame::MainFrameUIOnClose(wxCloseEvent& event) {
     Destroy();
-    exit(0);
 }
 
 void UI::MainFrame::m_bpButton_FullOnButtonClick(wxCommandEvent& event) {
@@ -70,6 +81,10 @@ void UI::MainFrame::ResetingSelectPanelProperties() {
 }
 
 void UI::MainFrame::InitializingCroppingThread() {
+    if (pthrd_SreenCropper) {
+        pthrd_SreenCropper->join();
+        delete pthrd_SreenCropper;
+    }
 	pthrd_SreenCropper = new std::thread([&]() {
 		while (!(m_frame_SelectFrame->atomic_b_croppingScreenIsRaised));
         m_frame_SelectFrame->atomic_b_croppingScreenIsRaised = false;
@@ -83,6 +98,10 @@ void UI::MainFrame::InitializingCroppingThread() {
 }
 
 void UI::MainFrame::InitializingActiveThread() {
+    if (pthrd_SreenActiveSelector) {
+        pthrd_SreenActiveSelector->join();
+        delete pthrd_SreenActiveSelector;
+    }
     pthrd_SreenActiveSelector = new std::thread([&]() {
         while (!(m_frame_SelectFrame->atomic_b_croppingScreenIsRaised)) {
             wxPoint cursorPos = wxGetMousePosition();
@@ -103,6 +122,6 @@ void UI::MainFrame::InitializingActiveThread() {
         else
             m_captor->Capture(m_frame_SelectFrame);
         this->Raise();
-        this->Show(true); 
+        this->Show(true);
     });
 }

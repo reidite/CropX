@@ -29,7 +29,7 @@ public:
 
     //!< Called before OnRun() to do initialization
     bool OnInit() wxOVERRIDE;
-
+    int OnExit() wxOVERRIDE;
 	wxDECLARE_NO_COPY_CLASS(CropX);
 };
 
@@ -52,6 +52,14 @@ bool CropX::OnInit() {
     return true;
 }
 
+int CropX::OnExit() {
+    /**
+    * Cleaning up resources before exiting
+    *
+    */
+    wxEntryCleanup();
+    return 0;
+}
 
 wxIMPLEMENT_APP(CropX);
 

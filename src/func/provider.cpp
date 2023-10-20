@@ -11,6 +11,10 @@ Func::Provider::Provider() {
 	m_automation->get_ControlViewWalker(&walker);
 }
 
+Func::Provider::~Provider() {
+
+}
+
 // ----------------------------------------------------------------------------
 // CaptureMechanism - Functions
 // ----------------------------------------------------------------------------
@@ -27,8 +31,8 @@ HRESULT Func::Provider::GetActiveComponent(int cursor_x, int cursor_y) {
 		width = static_cast<unsigned int>(pData[2]);
 		height = static_cast<unsigned int>(pData[3]);
 		
-		if (FAILED(walker->GetParentElement(element, &parent)) || !parent) return true;
-
+		if (FAILED(walker->GetParentElement(element, &parent)) || !parent) 
+			return true;
 		if (SUCCEEDED(parent->GetCurrentPropertyValue(UIA_BoundingRectanglePropertyId, &varValue))) {
 			SafeArrayAccessData(varValue.parray, (void**)&pData);
 			if (width > static_cast<unsigned int>(pData[2]) ||
@@ -41,7 +45,6 @@ HRESULT Func::Provider::GetActiveComponent(int cursor_x, int cursor_y) {
 		}
 		element->Release();
 		parent->Release();
-
 		return true;
 	}
 	return false;

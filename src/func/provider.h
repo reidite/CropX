@@ -40,6 +40,7 @@ namespace Func{
         unsigned int height;
 
         Provider();
+        ~Provider();
         //!< Container for the pointed client UI element
         IUIAutomationElement* element;
         //!< Container for the parent of the pointed client UI element
@@ -49,8 +50,6 @@ namespace Func{
         HRESULT GetActiveComponent(int cursor_x, int cursor_y);
 
     private:
-        ~Provider();
-        
         //!< Container for the UI element retrivor
         IUIAutomation* m_automation;
         //!< Container for the UI element traveller

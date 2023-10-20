@@ -115,7 +115,7 @@ namespace Func {
         std::vector<DISPLAYINFO> infos_displayHandlers;
 
         CaptureMechanism();
-        ~CaptureMechanism() { }
+        ~CaptureMechanism();
         
         //!< Capturing the screen
         void Capture(wxWindow* selectFrame);
